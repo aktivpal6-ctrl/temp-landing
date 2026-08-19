@@ -601,7 +601,7 @@ export const ClosingFooter = ({ converted }) => (
     <div className="max-w-5xl mx-auto px-6 py-28 md:py-36 text-center relative z-10">
       <Reveal>
         <Logo size={52} light />
-        <h2 className="mt-8 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight">
+        <h2 className="mt-8 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl sm:text-3xl tracking-tight">
           Find your people. Move together.
         </h2>
         <p className="mt-4 text-[#F7F7F2]/60 text-lg">Built in Canada. Built for movement. Built around people.</p>
