@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.App {
+  min-height: 100vh;
+}
+
 :root {
   --ap-green: #0F291E;
   --ap-green-soft: #16382A;

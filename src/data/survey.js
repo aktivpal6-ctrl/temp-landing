@@ -363,6 +363,5 @@ export const SURVEY = [
       "Maybe — I'd like to learn more",
       "Not right now",
     ],
-    reveal: { on: "Yes — I'd love to" },
   },
 ];

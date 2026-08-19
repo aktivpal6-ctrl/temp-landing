@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, ShieldCheck } from "lucide-react";
 import { Survey } from "@/components/Survey";
 import { Logo } from "@/components/primitives";
@@ -27,11 +29,11 @@ export const SurveyPage = () => {
     <div className="min-h-screen bg-[#F7F7F2]" data-testid="survey-page">
       <header className="sticky top-0 z-40 border-b border-black/10 bg-[#F7F7F2]/90 backdrop-blur-xl" data-testid="survey-page-header">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <Link to="/" className="inline-flex items-center gap-3" data-testid="survey-page-logo-link">
+          <Link href="/" className="inline-flex items-center gap-3" data-testid="survey-page-logo-link">
             <Logo size={38} showWord />
           </Link>
           <Link
-            to="/"
+            href="/"
             className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-[#0F291E] transition-colors hover:border-[#FF5C00]/40 hover:text-[#FF5C00]"
             data-testid="survey-page-back-link"
           >
