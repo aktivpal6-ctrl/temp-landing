@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ap-green: #0F291E;
+  --ap-green-soft: #16382A;
+  --ap-orange: #FF5C00;
+  --ap-bg: #F7F7F2;
+  --ap-ink: #1A1D1A;
+  --ap-ink-soft: #4A524A;
+  --radius: 0.75rem;
+  --background: 60 20% 96%;
+  --foreground: 120 5% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 120 5% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 120 5% 11%;
+  --primary: 154 47% 11%;
+  --primary-foreground: 60 20% 96%;
+  --secondary: 60 10% 92%;
+  --secondary-foreground: 120 5% 11%;
+  --muted: 60 10% 92%;
+  --muted-foreground: 120 5% 33%;
+  --accent: 22 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 45%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 60 8% 88%;
+  --input: 60 8% 88%;
+  --ring: 22 100% 50%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ap-bg);
+  color: var(--ap-ink);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--ap-orange);
+  color: #fff;
+}
+
+.font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Editorial marquee */
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.stroke-text {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(247, 247, 242, 0.35);
+}
+.stroke-text-green {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(15, 41, 30, 0.18);
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee-track { animation: none; }
+}
