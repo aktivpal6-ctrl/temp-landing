@@ -7,9 +7,9 @@ export const runtime = "nodejs";
 export async function POST(request) {
   try {
     console.log(
-      process.env.SMTP_USER,
-      process.env.SMTP_PASS,
-      process.env.MAIL_TO,
+      process.env.NEXT_PUBLIC_SMTP_USER,
+      process.env.NEXT_PUBLIC_SMTP_PASS,
+      process.env.NEXT_PUBLIC_MAIL_TO,
     );
 
     const payload = await request.json();
