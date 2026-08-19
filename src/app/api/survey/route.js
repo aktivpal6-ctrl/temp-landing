@@ -17,16 +17,16 @@ export async function POST(request) {
     const transporter = createTransport({
       service: "gmail",
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.NEXT_PUBLIC_SMTP_USER,
+        pass: process.env.NEXT_PUBLIC_SMTP_PASS,
       },
     });
     const html = buildSurveyEmailHtml(payload);
     const contactName = payload?.contact?.name || "Unknown";
 
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.MAIL_TO,
+      from: process.env.NEXT_PUBLIC_SMTP_USER,
+      to: process.env.NEXT_PUBLIC_MAIL_TO,
       replyTo: payload?.contact?.email || undefined,
       subject: `New AKTIVPAL survey response — ${contactName}`,
       html,
