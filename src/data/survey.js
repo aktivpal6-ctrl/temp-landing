@@ -12,22 +12,20 @@ export const IMAGES = {
 };
 
 export const MATCH_CRITERIA = [
-  { icon: "Compass", title: "Activity", body: "Hiking, running, cycling, climbing, skiing, snowboarding, tennis, pickleball, swimming, kayaking, gym, yoga and more." },
-  { icon: "Gauge", title: "Fitness & Skill", body: "Beginner. Intermediate. Advanced. Match your pace—not someone else's." },
-  { icon: "Clock", title: "When", body: "Saturday morning? After work? Sunrise? Last-minute adventure?" },
-  { icon: "MapPin", title: "Where", body: "Find people interested in the same places and activities around you." },
-  { icon: "Users", title: "Who", body: "Choose the kind of people you feel comfortable being active with." },
-  { icon: "Target", title: "Goals & Personality", body: "Training hard? Exploring casually? Meeting new people? Getting outside more?" },
+  { icon: "Compass", title: "Activity", body: "Hiking, running, skiing, climbing and more." },
+  { icon: "Gauge", title: "Experience", body: "Match your level, not someone else's." },
+  { icon: "MapPin", title: "Location", body: "People near the places you love." },
+  { icon: "CalendarClock", title: "Availability", body: "This weekend, after work or last-minute." },
 ];
 
 export const ACTIVITIES = [
-  { icon: "Footprints", title: "Hike together", body: "Find someone who wants to explore the same trail at the same pace." },
-  { icon: "Zap", title: "Run together", body: "Easy 5K? Tempo run? Trail run? Find someone who's training like you." },
-  { icon: "Bike", title: "Ride together", body: "Road cycling, mountain biking or a casual weekend ride." },
-  { icon: "Snowflake", title: "Snow days", body: "Find your ski or snowboard crew before the season passes you by." },
-  { icon: "Mountain", title: "Climb together", body: "Find climbing partners who match your experience and goals." },
-  { icon: "Trophy", title: "Play together", body: "Tennis, pickleball, basketball, soccer and more." },
-  { icon: "Waves", title: "Get outside", body: "Kayaking, swimming, camping, paddling, surfing and whatever comes next." },
+  { icon: "Footprints", title: "Hiking", body: "Explore the trail together." },
+  { icon: "Zap", title: "Running", body: "Find your pace partner." },
+  { icon: "Snowflake", title: "Skiing & Snowboarding", body: "Chase the season together." },
+  { icon: "Bike", title: "Cycling", body: "Road, mountain or casual." },
+  { icon: "Mountain", title: "Climbing", body: "Partners at your level." },
+  { icon: "Waves", title: "Swimming", body: "Laps, lakes and open water." },
+  { icon: "Compass", title: "Adventures", body: "…and whatever comes next." },
 ];
 
 export const WHO_FOR = [
@@ -39,20 +37,27 @@ export const WHO_FOR = [
 ];
 
 export const SAFETY = [
-  { icon: "BadgeCheck", title: "Identity verification", body: "Know whether a person has completed verification." },
-  { icon: "IdCard", title: "Profile information", body: "See relevant information before deciding who to connect with." },
-  { icon: "History", title: "Activity history", body: "Build reputation through real participation and experiences." },
-  { icon: "Star", title: "Ratings & reviews", body: "Give the community a way to build trust over time." },
-  { icon: "ShieldCheck", title: "Safety-focused matching", body: "Choose preferences that make you feel more comfortable." },
-  { icon: "ScrollText", title: "Community standards", body: "Clear expectations for respectful behaviour." },
+  { icon: "BadgeCheck", title: "Verification", body: "Know who's verified." },
+  { icon: "IdCard", title: "Profiles", body: "See who you're meeting." },
+  { icon: "History", title: "Activity history", body: "Reputation from real activity." },
+  { icon: "Star", title: "Reviews", body: "Trust built over time." },
+  { icon: "ScrollText", title: "Community standards", body: "Clear, respectful behaviour." },
 ];
 
 export const STEPS = [
-  { n: "01", title: "Tell us what you love doing", body: "Hiking? Running? Skiing? Cycling? Climbing? Something else?" },
-  { n: "02", title: "Tell us what you're looking for", body: "Your experience, fitness level, preferred pace, schedule and the kind of people you'd like to meet." },
-  { n: "03", title: "Help shape AKTIVPAL", body: "We're talking directly with Canada's outdoor community to build something genuinely useful." },
-  { n: "04", title: "Be among the first", body: "Early community members will get first access to AKTIVPAL as we launch." },
+  { n: "01", title: "Pick what moves you", body: "Hiking, running, skiing, cycling, climbing, swimming — whatever gets you moving." },
+  { n: "02", title: "Find your people", body: "Discover people who share your interests, your pace and your sense of adventure." },
+  { n: "03", title: "Make it happen", body: "Join an activity or create your own. Less planning, less scrolling, more doing." },
 ];
+
+export const COMMUNITY_TAGS = [
+  { icon: "Handshake", label: "Meet people" },
+  { icon: "Map", label: "Discover places" },
+  { icon: "Flame", label: "Try something new" },
+  { icon: "Heart", label: "Build friendships" },
+  { icon: "Sparkles", label: "Create memories" },
+];
+
 
 export const FOUNDING_TAGS = [
   { icon: "Footprints", label: "Get outside more" },

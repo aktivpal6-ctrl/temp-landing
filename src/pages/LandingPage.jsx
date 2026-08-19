@@ -5,17 +5,13 @@ import { ArrowRight } from "lucide-react";
 import {
   Hero,
   Problem,
-  Reframe,
   MatchCriteria,
-  ProductMoment,
-  Positioning,
-  ActivitiesGrid,
-  WhoFor,
-  Safety,
-  WhyCanada,
   HowItWorks,
-  Founding,
-  EmotionalClose,
+  ProductMoment,
+  Community,
+  ActivitiesGrid,
+  Safety,
+  FinalCTA,
   ClosingFooter,
 } from "@/components/Sections";
 import { PageAtmosphere } from "@/components/atmosphere";
@@ -96,17 +92,13 @@ export const LandingPage = () => {
 
       <Hero />
       <Problem />
-      <Reframe />
       <MatchCriteria />
-      <ProductMoment />
-      <Positioning />
-      <ActivitiesGrid />
-      <WhoFor />
-      <Safety />
-      <WhyCanada />
       <HowItWorks />
-      <Founding />
-      <EmotionalClose />
+      <ProductMoment />
+      <Community />
+      <ActivitiesGrid />
+      <Safety />
+      <FinalCTA />
       <ClosingFooter converted={false} />
 
       <StickyCTA visible={showSticky} />

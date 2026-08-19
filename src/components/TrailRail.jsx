@@ -5,12 +5,12 @@ import { motion, useScroll, useMotionValueEvent, useReducedMotion } from "framer
 const CHAPTERS = [
   { id: "problem" },
   { id: "match-criteria" },
+  { id: "how-it-works" },
   { id: "product-moment" },
+  { id: "community" },
   { id: "activities" },
   { id: "safety" },
-  { id: "why-canada" },
-  { id: "how-it-works" },
-  { id: "survey" },
+  { id: "final-cta" },
 ];
 
 // Gentle serpentine "trail" path from top -> bottom of the viewport.
