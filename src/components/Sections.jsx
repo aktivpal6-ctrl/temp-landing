@@ -1,6 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   motion,
+  AnimatePresence, // add this
   useScroll,
   useTransform,
   useReducedMotion,
@@ -78,9 +81,12 @@ export const Hero = () => {
         style={{ y: yBg, scale: scaleBg }}
         className="absolute inset-0"
       >
-        <img
+        <Image
           src={IMAGES.hero}
-          alt="Mountain ridge in Canada"
+          alt="Hikers moving along a mountain ridge trail"
+          fill
+          priority
+          sizes="100vw"
           className="w-full h-full object-cover opacity-55"
         />
       </motion.div>
@@ -129,8 +135,10 @@ export const Hero = () => {
             transition={{ delay: 0.75, duration: 0.6 }}
             className="mt-7 text-lg md:text-xl text-[#F7F7F2]/80 max-w-2xl leading-relaxed"
           >
-            Go for the hike. Run that trail. Ski that mountain. Explore
-            somewhere new.
+            AKTIVPAL is a free app that helps you find real people to hike,
+            run, ski, cycle, climb, and swim with in British Columbia — no more
+            'we should do this sometime.' Go for the hike. Run that trail. Ski
+            that mountain. Explore somewhere new.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -340,9 +348,11 @@ export const HowItWorks = () => {
                     md:hover:rotate-0 md:hover:-translate-y-3 md:hover:scale-[1.03]`}
                   data-testid={`step-card-${i}`}
                 >
-                  <img
+                  <Image
                     src={s.image}
                     alt={s.imageAlt}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
                     className="absolute inset-0 w-full h-full object-cover"
                     data-testid={`step-card-image-${i}`}
                   />
@@ -452,9 +462,11 @@ export const ProductMoment = () => {
               className="relative rounded-[2rem] overflow-hidden border border-black/10 shadow-2xl bg-[#0F291E]"
             >
               <div className="h-52 relative overflow-hidden">
-                <img
+                <Image
                   src={IMAGES.hike}
-                  alt="Grouse Grind trail"
+                  alt="Steep forest hiking trail for a Grouse Grind plan"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0F291E] to-transparent" />
@@ -685,6 +697,126 @@ export const Safety = () => {
   );
 };
 
+const FAQS = [
+  {
+    question: "What is AKTIVPAL?",
+    answer:
+      "A free app for finding real people to hike, run, ski, cycle, climb, and swim with in British Columbia. No more 'we should do this sometime.'",
+  },
+  {
+    question: "Is it safe to meet someone through AKTIVPAL?",
+    answer:
+      "You'll see who you're meeting before you go — verified profiles, activity history, and reviews from other members. Unlike dating apps, everyone's here for the same reason: to actually do something.",
+  },
+  {
+    question: "What activities can I do on AKTIVPAL?",
+    answer:
+      "Hiking, running, skiing and snowboarding, cycling, climbing, swimming — and whatever adventure comes next.",
+  },
+  {
+    question: "Where is AKTIVPAL available?",
+    answer: "British Columbia right now. We're expanding from there.",
+  },
+];
+
+/* ---------------- FAQ ---------------- */
+const FAQItem = ({ faq, isOpen, onToggle, index }) => (
+  <motion.div
+    variants={item}
+    className="bg-white rounded-3xl border border-black/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
+    data-testid={`faq-card-${index}`}
+  >
+    <button
+      onClick={onToggle}
+      aria-expanded={isOpen}
+      data-testid={`faq-toggle-${index}`}
+      className="group w-full flex items-center justify-between gap-6 text-left px-6 md:px-10 py-7 md:py-9 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00]/50"
+    >
+      <span className="font-display font-bold text-xl md:text-2xl text-[#0F291E] leading-snug group-hover:text-[#FF5C00] transition-colors">
+        {faq.question}
+      </span>
+      <motion.span
+        animate={{ rotate: isOpen ? 45 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#FF5C00]/10 flex items-center justify-center"
+      >
+        <Ic name="Plus" size={20} className="text-[#FF5C00]" />
+      </motion.span>
+    </button>
+    <AnimatePresence initial={false}>
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="overflow-hidden"
+        >
+          <p className="px-6 md:px-10 pb-8 md:pb-10 text-base md:text-lg text-[#4A524A] leading-relaxed max-w-2xl">
+            {faq.answer}
+          </p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
+);
+
+export const FAQ = () => {
+  const { ref, y } = useDrift(100);
+  const [openIndex, setOpenIndex] = useState(0); // first question open on load
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map(f => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
+
+  return (
+    <section
+      ref={ref}
+      className="relative bg-[#F7F7F2] py-28 md:py-36 overflow-hidden"
+      data-testid="faq"
+    >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <DriftNumeral n="08" y={y} className="text-[24rem] -right-16 top-0" />
+      <div className="max-w-3xl mx-auto px-6 relative z-10">
+        <Reveal>
+          <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
+            08 — FAQ
+          </span>
+          <h2 className="mt-4 font-display font-extrabold text-3xl md:text-5xl tracking-tight text-[#1A1D1A]">
+            Questions before you get moving.
+          </h2>
+        </Reveal>
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="mt-14 space-y-4"
+        >
+          {FAQS.map((faq, i) => (
+            <FAQItem
+              key={faq.question}
+              faq={faq}
+              index={i}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+            />
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
 /* ---------------- FINAL CTA — "Your next adventure could start here" ---------------- */
 export const FinalCTA = () => {
   const { ref, y } = useDrift(70);
@@ -695,16 +827,18 @@ export const FinalCTA = () => {
       data-testid="final-cta"
     >
       <div className="absolute inset-0" aria-hidden>
-        <img
+        <Image
           src={IMAGES.run}
-          alt=""
+          alt="Runner on an outdoor trail"
+          fill
+          sizes="100vw"
           className="w-full h-full object-cover object-center opacity-20"
           data-testid="final-cta-background-image"
         />
         <div className="absolute inset-0 bg-[#F7F7F2]/78" />
       </div>
       <DriftNumeral
-        n="08"
+        n="09"
         y={y}
         className="text-[22rem] left-1/2 -translate-x-1/2 top-4"
       />
@@ -775,15 +909,20 @@ export const ClosingFooter = ({ converted }) => (
           </span>
         </div>
         <nav className="flex items-center gap-6 text-sm text-[#F7F7F2]/60">
-          {["About", "Community", "Safety", "Contact"].map(l => (
-            <a
-              key={l}
-              href="#"
+          {[
+            { label: "About", href: "/about" },
+            { label: "Community", href: "/community" },
+            { label: "Safety", href: "/safety" },
+            { label: "Contact", href: "/contact" },
+          ].map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
               className="hover:text-[#FF5C00] transition-colors"
-              data-testid={`footer-link-${l.toLowerCase()}`}
+              data-testid={`footer-link-${label.toLowerCase()}`}
             >
-              {l}
-            </a>
+              {label}
+            </Link>
           ))}
         </nav>
         <span className="text-sm text-[#F7F7F2]/40">© 2026 AKTIVPAL</span>

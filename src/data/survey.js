@@ -38,16 +38,36 @@ export const MATCH_CRITERIA = [
 ];
 
 export const ACTIVITIES = [
-  { icon: "Footprints", title: "Hiking", body: "Explore the trail together." },
-  { icon: "Zap", title: "Running", body: "Find your pace partner." },
+  {
+    icon: "Footprints",
+    title: "Hiking",
+    body: "Explore Vancouver's North Shore trails, the Grouse Grind, or Squamish with a partner who matches your pace.",
+  },
+  {
+    icon: "Zap",
+    title: "Running",
+    body: "Find a running partner for Stanley Park, the Seawall, or your local trail.",
+  },
   {
     icon: "Snowflake",
     title: "Skiing & Snowboarding",
-    body: "Chase the season together.",
+    body: "Chase the season at Whistler, Cypress, or Grouse with people at your level.",
   },
-  { icon: "Bike", title: "Cycling", body: "Road, mountain or casual." },
-  { icon: "Mountain", title: "Climbing", body: "Partners at your level." },
-  { icon: "Waves", title: "Swimming", body: "Laps, lakes and open water." },
+  {
+    icon: "Bike",
+    title: "Cycling",
+    body: "Road, mountain, or casual — find riders around Vancouver and the Fraser Valley.",
+  },
+  {
+    icon: "Mountain",
+    title: "Climbing",
+    body: "Find climbing partners for Squamish's Smoke Bluffs or your local gym.",
+  },
+  {
+    icon: "Waves",
+    title: "Swimming",
+    body: "Find swim partners for Kitsilano Pool, Sasamat Lake, or your local lanes.",
+  },
   { icon: "Compass", title: "Adventures", body: "…and whatever comes next." },
 ];
 
@@ -96,21 +116,21 @@ export const STEPS = [
     title: "Pick what moves you",
     body: "Hiking, running, skiing, cycling, climbing, swimming — whatever gets you moving.",
     image: IMAGES.climb,
-    imageAlt: "Climber on a rock face",
+    imageAlt: "Outdoor rock climber on a climbing route",
   },
   {
     n: "02",
     title: "Find your people",
     body: "Discover people who share your interests, your pace and your sense of adventure.",
     image: IMAGES.bike,
-    imageAlt: "Cyclists riding together",
+    imageAlt: "Cyclists riding together outdoors",
   },
   {
     n: "03",
     title: "Make it happen",
     body: "Join an activity or create your own. Less planning, less scrolling, more doing.",
     image: IMAGES.ski,
-    imageAlt: "Skier on a snowy slope",
+    imageAlt: "Skier descending a snowy mountain slope",
   },
 ];
 

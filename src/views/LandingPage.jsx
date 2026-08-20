@@ -13,6 +13,7 @@ import {
   Community,
   ActivitiesGrid,
   Safety,
+  FAQ,
   FinalCTA,
   ClosingFooter,
 } from "@/components/Sections";
@@ -100,6 +101,7 @@ export const LandingPage = () => {
       <Community />
       <ActivitiesGrid />
       <Safety />
+      <FAQ />
       <FinalCTA />
       <ClosingFooter converted={false} />
 

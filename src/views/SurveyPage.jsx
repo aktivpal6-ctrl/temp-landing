@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, ShieldCheck } from "lucide-react";
 import { Survey } from "@/components/Survey";
@@ -46,7 +47,13 @@ export const SurveyPage = () => {
         <section className="lg:sticky lg:top-28 space-y-6" data-testid="survey-page-overview">
           <div className="relative overflow-hidden rounded-[2rem] bg-[#0F291E] grain text-[#F7F7F2] border border-black/10 shadow-[0_24px_60px_rgba(15,41,30,0.18)]">
             <div className="absolute inset-0" aria-hidden>
-              <img src={IMAGES.canada} alt="People outdoors in Canada" className="h-full w-full object-cover opacity-30" />
+              <Image
+                src={IMAGES.canada}
+                alt="People outdoors in Canada"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="h-full w-full object-cover opacity-30"
+              />
               <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E]/70 via-[#0F291E]/80 to-[#0F291E]" />
             </div>
 
