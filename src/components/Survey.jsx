@@ -112,11 +112,12 @@ export const Survey = ({ onComplete, standalone = false }) => {
     });
   };
 
-  // Name, email and phone are required to enter the survey at all.
-  // Instagram stays optional.
+  // Name and email are required to enter the survey.
+  // Phone and Instagram stay optional.
   const isContactValid = () => {
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim());
-    const phoneOk = /^[0-9+()\-\s]{7,}$/.test(contact.phone.trim());
+    const phone = contact.phone.trim();
+    const phoneOk = !phone || /^[0-9+()\-\s]{7,}$/.test(phone);
     return contact.name.trim().length > 0 && emailOk && phoneOk;
   };
 
@@ -269,14 +270,14 @@ export const Survey = ({ onComplete, standalone = false }) => {
               How can we reach you?
             </h3>
             <p className="mt-2 text-sm font-semibold text-[#4A524A]">
-              Name, email and phone are required. Instagram is optional.
+              Name and email are required. Phone and Instagram are optional.
             </p>
 
             <div className="mt-6 space-y-3">
               {[
                 { k: "name", ph: "Name *", type: "text" },
                 { k: "email", ph: "Email *", type: "email" },
-                { k: "phone", ph: "Phone number *", type: "tel" },
+                { k: "phone", ph: "Phone number (optional)", type: "tel" },
                 { k: "instagram", ph: "Instagram (optional)", type: "text" },
               ].map(f => (
                 <input
@@ -297,8 +298,8 @@ export const Survey = ({ onComplete, standalone = false }) => {
                     className="text-xs font-semibold text-red-600"
                     data-testid="contact-validation-msg"
                   >
-                    Enter a name, a valid email, and a valid phone number to
-                    continue.
+                    Enter a name and valid email. If you add a phone number,
+                    make sure it looks valid.
                   </p>
                 )}
             </div>
