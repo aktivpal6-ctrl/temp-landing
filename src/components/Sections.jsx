@@ -135,10 +135,10 @@ export const Hero = () => {
             transition={{ delay: 0.75, duration: 0.6 }}
             className="mt-7 text-lg md:text-xl text-[#F7F7F2]/80 max-w-2xl leading-relaxed"
           >
-            AKTIVPAL is a free app that helps you find real people to hike,
-            run, ski, cycle, climb, and swim with in British Columbia — no more
-            'we should do this sometime.' Go for the hike. Run that trail. Ski
-            that mountain. Explore somewhere new.
+            AKTIVPAL is a free app that helps you find real people to hike, run,
+            ski, cycle, climb, and swim within British Columbia—no more “we
+            should do this sometime.” Go for the hike. Run that trail. Ski that
+            mountain. Explore somewhere new.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
