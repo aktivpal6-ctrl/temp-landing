@@ -1,207 +1,81 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import * as Icons from "lucide-react";
 import Link from "next/link";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { CTA } from "./primitives";
-import { SURVEY } from "../data/survey";
+
 const Ic = ({ name, ...p }) => {
   const C = Icons[name] || Icons.Circle;
   return <C {...p} />;
 };
 
-// Build the visible step list given current answers (conditional logic)
-const buildSteps = (answers) => {
-  return SURVEY.filter((q) => {
-    if (!q.condition) return true;
-    const val = answers[q.condition.q];
-    return q.condition.in.includes(val);
-  });
-};
-
-const ChoiceCard = ({ label, selected, onClick, testId }) => (
-  <motion.button
-    type="button"
-    data-testid={testId}
-    onClick={onClick}
-    whileTap={{ scale: 0.98 }}
-    className={`w-full text-left flex items-center gap-4 p-5 rounded-2xl border-2 transition-colors ${
-      selected
-        ? "border-[#FF5C00] bg-[#FF5C00]/10"
-        : "border-black/10 bg-white hover:border-[#FF5C00]/40 hover:bg-[#FF5C00]/[0.04]"
-    }`}
-  >
-    <span
-      className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-        selected ? "border-[#FF5C00] bg-[#FF5C00]" : "border-black/20"
-      }`}
-    >
-      {selected && <Ic name="Check" size={14} className="text-white" />}
-    </span>
-    <span
-      className={`font-semibold text-[15px] ${selected ? "text-[#0F291E]" : "text-[#1A1D1A]"}`}
-    >
-      {label}
-    </span>
-  </motion.button>
-);
-
-const Scale = ({ value, low, high, onChange, testId }) => (
-  <div className="mt-2">
-    <div className="flex items-center justify-between gap-2">
-      {[1, 2, 3, 4, 5].map((n) => (
-        <motion.button
-          key={n}
-          type="button"
-          data-testid={`${testId}-${n}`}
-          onClick={() => onChange(n)}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.94 }}
-          className={`flex-1 aspect-square max-w-[72px] rounded-2xl border-2 font-display font-black text-xl md:text-2xl flex items-center justify-center transition-colors ${
-            value === n
-              ? "border-[#FF5C00] bg-[#FF5C00] text-white"
-              : "border-black/10 bg-white text-[#0F291E] hover:border-[#FF5C00]/40"
-          }`}
-        >
-          {n}
-        </motion.button>
-      ))}
-    </div>
-    <div className="flex justify-between mt-3 text-xs font-semibold text-[#4A524A]">
-      <span>{low}</span>
-      <span>{high}</span>
-    </div>
-  </div>
-);
+const validationSchema = Yup.object({
+  name: Yup.string().trim().required("Name is required"),
+  location: Yup.string().trim().required("Location is required"),
+  email: Yup.string()
+    .trim()
+    .required("Email is required")
+    .email("Enter a valid email address"),
+  phone: Yup.string()
+    .trim()
+    .test("phone", "Enter a valid US or Canadian phone number", (value) => {
+      if (!value) return true;
+      const digits = value.replace(/\D/g, "");
+      if (digits.length === 10) {
+        return /^[2-9]\d{2}[2-9]\d{6}$/.test(digits);
+      }
+      if (digits.length === 11 && digits.startsWith("1")) {
+        return /^1[2-9]\d{2}[2-9]\d{6}$/.test(digits);
+      }
+      return false;
+    }),
+  instagram: Yup.string().trim(),
+});
 
 export const Survey = ({ onComplete, standalone = false }) => {
   const reduce = useReducedMotion();
-  const [started, setStarted] = useState(false);
-  const [contactConfirmed, setContactConfirmed] = useState(false);
-  const [answers, setAnswers] = useState({});
-  const [others, setOthers] = useState({});
-  const [contact, setContact] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    instagram: "",
-  });
-  const [idx, setIdx] = useState(0);
-  const [dir, setDir] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState(false);
 
-  const steps = useMemo(() => buildSteps(answers), [answers]);
-  const total = steps.length;
-  const q = steps[idx];
-  const progress = done ? 100 : Math.round((idx / total) * 100);
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      location: "",
+      email: "",
+      phone: "",
+      instagram: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      setSubmitting(true);
+      setError(false);
 
-  const setAns = useCallback(
-    (id, val) => setAnswers((a) => ({ ...a, [id]: val })),
-    [],
-  );
+      try {
+        const res = await fetch("/api/survey", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contact: values }),
+        });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
 
-  const toggleMulti = (id, opt, max) => {
-    setAnswers((a) => {
-      const cur = Array.isArray(a[id]) ? a[id] : [];
-      if (cur.includes(opt))
-        return { ...a, [id]: cur.filter((x) => x !== opt) };
-      if (max && cur.length >= max) return a;
-      return { ...a, [id]: [...cur, opt] };
-    });
-  };
+        setSubmitting(false);
+        setDone(true);
+        onComplete && onComplete();
+      } catch (e) {
+        console.log(e);
+        setSubmitting(false);
+        setError(true);
+      }
+    },
+  });
 
-  // Name and email are required to enter the survey.
-  // Phone and Instagram stay optional.
-  const isContactValid = () => {
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim());
-    const phone = contact.phone.trim();
-    const phoneOk = !phone || /^[0-9+()\-\s]{7,}$/.test(phone);
-    return contact.name.trim().length > 0 && emailOk && phoneOk;
-  };
-
-  const canProceed = () => {
-    if (!q) return false;
-    if (q.type === "textarea") return true; // optional-ish, allow skip
-    if (q.type === "scale") return !!answers[q.id];
-    if (q.type === "single") return !!answers[q.id];
-    if (q.type === "multi")
-      return Array.isArray(answers[q.id]) && answers[q.id].length > 0;
-    return true;
-  };
-
-  const next = () => {
-    if (idx < total - 1) {
-      setDir(1);
-      setIdx((i) => i + 1);
-    } else submit();
-  };
-  const back = () => {
-    if (idx > 0) {
-      setDir(-1);
-      setIdx((i) => i - 1);
-    }
-  };
-
-  const submit = async () => {
-    setSubmitting(true);
-    setError(false);
-    const payload = {
-      answers: SURVEY.filter((s) =>
-        buildSteps(answers).find((v) => v.id === s.id),
-      ).map((s) => {
-        let ans = answers[s.id];
-        if (s.allowOther && others[s.id]) {
-          ans = Array.isArray(ans) ? [...ans, `Other: ${others[s.id]}`] : ans;
-        }
-        return { question: s.label, answer: ans ?? "" };
-      }),
-      contact,
-    };
-    // include q6 followup
-    if (answers.q6b)
-      payload.answers.push({
-        question: SURVEY.find((x) => x.id === "q6").followup.label,
-        answer: answers.q6b,
-      });
-
-    try {
-      const res = await fetch("/api/survey", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-
-      setSubmitting(false);
-      setDone(true);
-      onComplete && onComplete();
-    } catch (e) {
-      console.log(e);
-
-      setSubmitting(false);
-      setError(true);
-    }
-  };
-
-  const variants = {
-    enter: (d) =>
-      reduce ? { opacity: 0 } : { x: d > 0 ? 60 : -60, opacity: 0 },
-    center: { x: 0, opacity: 1 },
-    exit: (d) =>
-      reduce ? { opacity: 0 } : { x: d > 0 ? -60 : 60, opacity: 0 },
-  };
-
-  const resetSurvey = () => {
-    setStarted(false);
-    setContactConfirmed(false);
-    setAnswers({});
-    setOthers({});
-    setContact({ name: "", email: "", phone: "", instagram: "" });
-    setIdx(0);
-    setDir(1);
+  const resetForm = () => {
+    formik.resetForm();
     setSubmitting(false);
     setDone(false);
     setError(false);
@@ -215,333 +89,113 @@ export const Survey = ({ onComplete, standalone = false }) => {
     ? "max-w-2xl mx-auto px-6 py-8 md:px-8 md:py-10 relative z-10"
     : "max-w-2xl mx-auto px-6 relative z-10";
 
+  const fields = [
+    { name: "name", placeholder: "Name *", type: "text" },
+    { name: "location", placeholder: "Location *", type: "text" },
+    { name: "email", placeholder: "Email *", type: "email" },
+    { name: "phone", placeholder: "Phone number (optional)", type: "tel" },
+    { name: "instagram", placeholder: "Instagram (optional)", type: "text" },
+  ];
+
   return (
     <section id="survey" className={sectionClasses} data-testid="survey">
       <div className={containerClasses}>
-        {/* ---- Intro ---- */}
-        {!started && !done && (
+        {/* ---- Form ---- */}
+        {!done && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center"
+            className="relative"
           >
             <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-              Help Build AKTIVPAL
+              Join the movement
             </span>
-            <h2 className="mt-4 font-display font-black text-4xl md:text-6xl tracking-tighter text-[#1A1D1A] leading-[0.95]">
-              We want to build this around what people actually need.
-            </h2>
-            <p className="mt-8 text-[15px] md:text-base text-[#4A524A] leading-relaxed max-w-xl mx-auto">
-              We're building AKTIVPAL to help people find the right people to be
-              active with—whether that's a hiking partner, running buddy, ski
-              partner, cycling group, climbing partner, or simply someone who
-              wants to get outside. Your answers will help us understand whether
-              this is a problem worth solving—and what AKTIVPAL should actually
-              become.
-            </p>
-            {standalone && (
-              <p
-                className="mt-4 text-sm font-semibold text-[#0F291E]"
-                data-testid="survey-page-intro-note"
-              >
-                You can take the full survey here without leaving the rest of
-                the landing page in the background.
-              </p>
-            )}
-            <div className="mt-10">
-              <CTA testId="survey-start-btn" onClick={() => setStarted(true)}>
-                Tell us what you need <Ic name="ArrowRight" size={18} />
-              </CTA>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ---- Contact gate (required before the survey starts) ---- */}
-        {started && !contactConfirmed && !done && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            data-testid="survey-contact-gate"
-          >
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-              Before we start
-            </span>
-            <h3 className="mt-3 font-display font-bold text-2xl md:text-3xl tracking-tight text-[#0F291E] leading-tight">
-              How can we reach you?
+            <h3 className="mt-4 font-display font-black text-3xl md:text-4xl tracking-tight text-[#0F291E] leading-tight">
+              Sign up to be an early member
             </h3>
-            <p className="mt-2 text-sm font-semibold text-[#4A524A]">
-              Name and email are required. Phone and Instagram are optional.
+            <p className="mt-3 text-[15px] text-[#4A524A] leading-relaxed max-w-lg">
+              Enter your details below. We'll keep you updated on the launch and
+              invite you to be one of the first to try AKTIVPAL.
             </p>
 
-            <div className="mt-6 space-y-3">
-              {[
-                { k: "name", ph: "Name *", type: "text" },
-                { k: "email", ph: "Email *", type: "email" },
-                { k: "phone", ph: "Phone number (optional)", type: "tel" },
-                { k: "instagram", ph: "Instagram (optional)", type: "text" },
-              ].map((f) => (
-                <input
-                  key={f.k}
-                  data-testid={`contact-${f.k}`}
-                  placeholder={f.ph}
-                  type={f.type}
-                  value={contact[f.k]}
-                  onChange={(e) =>
-                    setContact((c) => ({ ...c, [f.k]: e.target.value }))
-                  }
-                  className="w-full p-4 rounded-2xl border-2 border-black/10 bg-white focus:border-[#FF5C00] outline-none text-[15px]"
-                />
-              ))}
-              {!isContactValid() &&
-                (contact.name || contact.email || contact.phone) && (
-                  <p
-                    className="text-xs font-semibold text-red-600"
-                    data-testid="contact-validation-msg"
-                  >
-                    Enter a name and valid email. If you add a phone number,
-                    make sure it looks valid.
-                  </p>
-                )}
-            </div>
-
-            <div className="mt-8 flex items-center justify-between gap-4">
-              <button
-                type="button"
-                data-testid="survey-contact-back-btn"
-                onClick={() => setStarted(false)}
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0F291E] hover:text-[#FF5C00] transition-colors"
-              >
-                <Ic name="ArrowLeft" size={16} /> Back
-              </button>
-              <CTA
-                testId="survey-contact-continue-btn"
-                onClick={() => {
-                  if (isContactValid()) setContactConfirmed(true);
-                }}
-                className={
-                  !isContactValid() ? "opacity-40 pointer-events-none" : ""
-                }
-              >
-                Continue <Ic name="ArrowRight" size={16} />
-              </CTA>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ---- Form ---- */}
-        {started && contactConfirmed && !done && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* progress */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-3">
-                <span
-                  className="text-xs font-bold uppercase tracking-widest text-[#4A524A]"
-                  data-testid="survey-progress-label"
-                >
-                  Question {idx + 1} of {total}
-                </span>
-                <span className="text-xs font-bold text-[#FF5C00]">
-                  {progress}%
-                </span>
-              </div>
-              <div className="h-2 rounded-full bg-black/10 overflow-hidden">
-                <motion.div
-                  className="h-full bg-[#FF5C00] rounded-full"
-                  animate={{ width: `${(idx / total) * 100}%` }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                />
-              </div>
-            </div>
-
-            <div className="relative min-h-[360px]">
-              <AnimatePresence mode="wait" custom={dir}>
-                <motion.div
-                  key={q.id}
-                  custom={dir}
-                  variants={variants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {q.section && (
-                    <div className="mb-4 rounded-xl bg-[#0F291E] text-[#F7F7F2] px-4 py-3 text-sm font-semibold flex items-center gap-2">
-                      <Ic
-                        name="ShieldCheck"
-                        size={16}
-                        className="text-[#FF5C00]"
-                      />{" "}
-                      {q.section}
-                    </div>
-                  )}
-                  <h3 className="font-display font-bold text-2xl md:text-3xl tracking-tight text-[#0F291E] leading-tight">
-                    {q.label}
-                  </h3>
-                  {q.hint && (
-                    <p className="mt-2 text-sm font-semibold text-[#FF5C00]">
-                      {q.hint}
+            <form onSubmit={formik.handleSubmit} className="mt-8 space-y-3" noValidate>
+              {fields.map((f) => (
+                <div key={f.name}>
+                  <input
+                    id={f.name}
+                    name={f.name}
+                    placeholder={f.placeholder}
+                    type={f.type}
+                    value={formik.values[f.name]}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    disabled={submitting}
+                    className="w-full p-4 rounded-2xl border-2 bg-white outline-none text-[15px] transition-colors focus:border-[#FF5C00] disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid={`contact-${f.name}`}
+                  />
+                  {formik.touched[f.name] && formik.errors[f.name] && (
+                    <p
+                      className="mt-1.5 text-xs font-semibold text-red-600"
+                      data-testid={`error-${f.name}`}
+                    >
+                      {formik.errors[f.name]}
                     </p>
                   )}
+                </div>
+              ))}
 
-                  <motion.div
-                    className="mt-6 space-y-3"
-                    initial="hidden"
-                    animate="show"
-                    variants={{
-                      show: { transition: { staggerChildren: 0.04 } },
-                    }}
-                  >
-                    {/* SINGLE */}
-                    {q.type === "single" &&
-                      q.options.map((opt) => (
-                        <motion.div
-                          key={opt}
-                          variants={{
-                            hidden: { opacity: 0, y: 10 },
-                            show: { opacity: 1, y: 0 },
-                          }}
-                        >
-                          <ChoiceCard
-                            label={opt}
-                            selected={answers[q.id] === opt}
-                            onClick={() => setAns(q.id, opt)}
-                            testId={`survey-option-${q.id}-${opt.slice(0, 8)}`}
-                          />
-                        </motion.div>
-                      ))}
+              {error && (
+                <p
+                  className="text-sm font-semibold text-red-600 text-center"
+                  data-testid="survey-error"
+                >
+                  Something went wrong. Please try again.
+                </p>
+              )}
 
-                    {/* MULTI */}
-                    {q.type === "multi" && (
-                      <>
-                        {q.options.map((opt) => (
-                          <motion.div
-                            key={opt}
-                            variants={{
-                              hidden: { opacity: 0, y: 10 },
-                              show: { opacity: 1, y: 0 },
-                            }}
-                          >
-                            <ChoiceCard
-                              label={opt}
-                              selected={(answers[q.id] || []).includes(opt)}
-                              onClick={() => toggleMulti(q.id, opt, q.max)}
-                              testId={`survey-option-${q.id}-${opt.slice(0, 8)}`}
-                            />
-                          </motion.div>
-                        ))}
-                        {q.allowOther && (
-                          <input
-                            data-testid={`survey-other-${q.id}`}
-                            placeholder="Other (optional)…"
-                            value={others[q.id] || ""}
-                            onChange={(e) =>
-                              setOthers((o) => ({
-                                ...o,
-                                [q.id]: e.target.value,
-                              }))
-                            }
-                            className="w-full p-4 rounded-2xl border-2 border-black/10 bg-white focus:border-[#FF5C00] outline-none text-[15px]"
-                          />
-                        )}
-                      </>
-                    )}
+              <div className="pt-4">
+                <CTA
+                  testId="survey-submit-btn"
+                  type="submit"
+                  disabled={submitting || !formik.isValid}
+                  className={
+                    submitting || !formik.isValid
+                      ? "opacity-40 pointer-events-none"
+                      : ""
+                  }
+                >
+                  {submitting ? (
+                    <>
+                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      Submitting…
+                    </>
+                  ) : (
+                    <>
+                      Submit <Ic name="Send" size={16} />
+                    </>
+                  )}
+                </CTA>
+              </div>
+            </form>
 
-                    {/* SCALE */}
-                    {q.type === "scale" && (
-                      <Scale
-                        value={answers[q.id]}
-                        low={q.low}
-                        high={q.high}
-                        onChange={(n) => setAns(q.id, n)}
-                        testId={`survey-scale-${q.id}`}
-                      />
-                    )}
-
-                    {/* TEXTAREA */}
-                    {q.type === "textarea" && (
-                      <textarea
-                        data-testid={`survey-text-${q.id}`}
-                        rows={q.emphasis ? 5 : 4}
-                        placeholder="Type your answer…"
-                        value={answers[q.id] || ""}
-                        onChange={(e) => setAns(q.id, e.target.value)}
-                        className={`w-full p-4 rounded-2xl border-2 bg-white outline-none text-[15px] leading-relaxed resize-none focus:border-[#FF5C00] ${
-                          q.emphasis ? "border-[#FF5C00]/40" : "border-black/10"
-                        }`}
-                      />
-                    )}
-
-                    {/* q6 followup */}
-                    {q.followup && (
-                      <div className="pt-2">
-                        <label className="block text-sm font-bold text-[#0F291E] mb-2">
-                          {q.followup.label}
-                        </label>
-                        <textarea
-                          data-testid="survey-text-q6b"
-                          rows={3}
-                          value={answers.q6b || ""}
-                          onChange={(e) => setAns("q6b", e.target.value)}
-                          placeholder="Optional, but really helpful…"
-                          className="w-full p-4 rounded-2xl border-2 border-[#FF5C00]/40 bg-white outline-none text-[15px] resize-none focus:border-[#FF5C00]"
-                        />
-                      </div>
-                    )}
-                  </motion.div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* nav */}
-            {error && (
-              <p
-                className="mt-4 text-sm font-semibold text-red-600 text-center"
-                data-testid="survey-error"
+            {/* ---- Loading Overlay ---- */}
+            {submitting && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-white/80 backdrop-blur-sm"
               >
-                Something went wrong sending your answers. Please tap Submit to
-                try again.
-              </p>
+                <span className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-[#FF5C00] border-t-transparent" />
+                <p className="mt-4 text-sm font-semibold text-[#0F291E]">
+                  Submitting your details…
+                </p>
+                <p className="mt-1 text-xs text-[#4A524A]">
+                  Hang tight, this won't take long.
+                </p>
+              </motion.div>
             )}
-            <div className="mt-8 flex items-center justify-between gap-4">
-              <button
-                data-testid="survey-back-btn"
-                onClick={back}
-                disabled={idx === 0}
-                className={`inline-flex items-center gap-1.5 text-sm font-bold transition-colors ${
-                  idx === 0
-                    ? "text-black/20 cursor-not-allowed"
-                    : "text-[#0F291E] hover:text-[#FF5C00]"
-                }`}
-              >
-                <Ic name="ArrowLeft" size={16} /> Back
-              </button>
-              <CTA
-                testId="survey-next-btn"
-                onClick={next}
-                className={
-                  !canProceed() ? "opacity-40 pointer-events-none" : ""
-                }
-              >
-                {submitting
-                  ? "Sending…"
-                  : idx === total - 1
-                    ? "Submit"
-                    : "Next"}
-                {!submitting && (
-                  <Ic
-                    name={idx === total - 1 ? "Send" : "ArrowRight"}
-                    size={16}
-                  />
-                )}
-              </CTA>
-            </div>
           </motion.div>
         )}
 
@@ -578,16 +232,12 @@ export const Survey = ({ onComplete, standalone = false }) => {
               </motion.svg>
             </motion.div>
             <h2 className="mt-8 font-display font-black text-4xl md:text-5xl tracking-tighter text-[#1A1D1A]">
-              You're officially on our radar. 👋
+              You're officially on our radar.
             </h2>
             <p className="mt-5 text-lg text-[#4A524A] max-w-lg mx-auto leading-relaxed">
-              Thanks for helping us build AKTIVPAL. We're starting in Canada
-              with a simple idea: you shouldn't have to choose between staying
-              home and going alone.
-            </p>
-            <p className="mt-4 text-[15px] text-[#4A524A] max-w-lg mx-auto">
-              We'll use what we learn from this community to shape the first
-              version of AKTIVPAL.
+              Thanks for signing up. We're starting in Canada with a simple
+              idea: you shouldn't have to choose between staying home and going
+              alone.
             </p>
             <p className="mt-8 font-display font-black text-2xl md:text-3xl text-[#0F291E]">
               You're one step closer to finding your{" "}
@@ -607,7 +257,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                 </Link>
                 <button
                   type="button"
-                  onClick={resetSurvey}
+                  onClick={resetForm}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF5C00] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#e64f00]"
                   data-testid="survey-success-reset-btn"
                 >
