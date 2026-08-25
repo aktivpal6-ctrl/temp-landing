@@ -800,7 +800,7 @@ export const FAQ = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <DriftNumeral n="08" y={y} className="text-[24rem] -right-16 top-0" />
+      <DriftNumeral n="05" y={y} className="text-[24rem] -right-16 top-0" />
       <div className="max-w-3xl mx-auto px-6 relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
