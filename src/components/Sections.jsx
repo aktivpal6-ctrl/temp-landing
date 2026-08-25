@@ -335,7 +335,7 @@ export const HowItWorks = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-            03 — How AKTIVPAL works
+            How AKTIVPAL works
           </span>
           <h2 className="mt-4 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight max-w-2xl">
             Less planning. Less scrolling. More doing.
