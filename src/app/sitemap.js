@@ -3,7 +3,7 @@ export default function sitemap() {
   const base = "https://www.aktivpal.com";
   const routes = [
     { path: "", changeFrequency: "weekly", priority: 1.0 },
-    { path: "/survey", changeFrequency: "weekly", priority: 0.8 },
+    { path: "/waitlist", changeFrequency: "weekly", priority: 0.8 },
   ];
 
   return routes.map(({ path, changeFrequency, priority }) => ({

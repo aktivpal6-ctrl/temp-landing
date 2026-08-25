@@ -113,11 +113,11 @@ export const CTA = React.forwardRef(
   }
 );
 
-export const scrollToSurvey = () => {
-  if (window.location.pathname !== "/survey") {
-    window.location.assign("/survey");
+export const scrollToWaitlist = () => {
+  if (window.location.pathname !== "/waitlist") {
+    window.location.assign("/waitlist");
     return;
   }
-  const el = document.getElementById("survey");
+  const el = document.getElementById("waitlist");
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 };

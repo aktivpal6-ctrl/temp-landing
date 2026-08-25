@@ -56,7 +56,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
       setError(false);
 
       try {
-        const res = await fetch("/api/survey", {
+        const res = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ contact: values }),
@@ -98,7 +98,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
   ];
 
   return (
-    <section id="survey" className={sectionClasses} data-testid="survey">
+    <section id="waitlist" className={sectionClasses} data-testid="waitlist">
       <div className={containerClasses}>
         {/* ---- Form ---- */}
         {!done && (
@@ -109,18 +109,37 @@ export const Survey = ({ onComplete, standalone = false }) => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-              Join the movement
-            </span>
-            <h3 className="mt-4 font-display font-black text-3xl md:text-4xl tracking-tight text-[#0F291E] leading-tight">
-              Sign up to be an early member
-            </h3>
-            <p className="mt-3 text-[15px] text-[#4A524A] leading-relaxed max-w-lg">
-              Enter your details below. We'll keep you updated on the launch and
-              invite you to be one of the first to try AKTIVPAL.
-            </p>
+            {!standalone && (
+              <>
+                <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
+                  Join the movement
+                </span>
+                <h3 className="mt-4 font-display font-black text-3xl md:text-4xl tracking-tight text-[#0F291E] leading-tight">
+                  Sign up to be an early member
+                </h3>
+                <p className="mt-3 text-[15px] text-[#4A524A] leading-relaxed max-w-lg">
+                  Enter your details below. We'll keep you updated on the launch and
+                  invite you to be one of the first to try AKTIVPAL.
+                </p>
+              </>
+            )}
 
-            <form onSubmit={formik.handleSubmit} className="mt-8 space-y-3" noValidate>
+            {standalone && (
+              <>
+                <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
+                  Early access
+                </span>
+                <h3 className="mt-3 font-display font-black text-2xl md:text-3xl tracking-tight text-[#0F291E] leading-tight">
+                  Join the waitlist
+                </h3>
+                <p className="mt-3 text-sm text-[#4A524A] leading-relaxed">
+                  Get first access when we launch. No spam, just updates that
+                  matter.
+                </p>
+              </>
+            )}
+
+            <form onSubmit={formik.handleSubmit} className={standalone ? "mt-6 space-y-3" : "mt-8 space-y-3"} noValidate>
               {fields.map((f) => (
                 <div key={f.name}>
                   <input

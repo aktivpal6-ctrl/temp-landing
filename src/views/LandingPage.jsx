@@ -19,7 +19,7 @@ import {
 } from "@/components/Sections";
 import { PageAtmosphere } from "@/components/atmosphere";
 import { TrailRail } from "@/components/TrailRail";
-import { Logo, scrollToSurvey } from "@/components/primitives";
+import { Logo, scrollToWaitlist } from "@/components/primitives";
 
 const StickyCTA = ({ visible }) => {
   return (
@@ -46,7 +46,7 @@ const StickyCTA = ({ visible }) => {
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              onClick={scrollToSurvey}
+              onClick={scrollToWaitlist}
               data-testid="sticky-cta-btn"
               className="shrink-0 inline-flex items-center gap-2 rounded-full bg-[#FF5C00] text-white font-display font-bold px-5 py-3 text-sm hover:bg-[#e64f00] transition-colors"
             >

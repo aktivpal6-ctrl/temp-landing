@@ -16,7 +16,7 @@ import {
   CTA,
   stagger,
   item,
-  scrollToSurvey,
+  scrollToWaitlist,
 } from "./primitives";
 import { useDrift } from "./atmosphere";
 import {
@@ -176,7 +176,7 @@ export const Hero = () => {
             transition={{ delay: 0.95, duration: 0.6 }}
             className="mt-10 flex flex-col items-center gap-4"
           >
-            <CTA testId="hero-cta" onClick={scrollToSurvey}>
+            <CTA testId="hero-cta" onClick={scrollToWaitlist}>
               JOIN THE MOVEMENT <Ic name="ArrowRight" size={18} />
             </CTA>
             <span className="text-sm text-[#F7F7F2]/50 font-medium">
@@ -870,7 +870,7 @@ export const FinalCTA = () => {
           </p>
         </Reveal>
         <Reveal delay={0.2} className="mt-10">
-          <CTA testId="finalcta-cta" onClick={scrollToSurvey}>
+          <CTA testId="finalcta-cta" onClick={scrollToWaitlist}>
             JOIN AKTIVPAL <Ic name="ArrowRight" size={18} />
           </CTA>
           <p className="mt-4 text-sm text-[#4A524A]">
@@ -900,7 +900,7 @@ export const ClosingFooter = ({ converted }) => (
       </Reveal>
       {!converted && (
         <Reveal delay={0.1} className="mt-10">
-          <CTA testId="footer-cta" onClick={scrollToSurvey}>
+          <CTA testId="footer-cta" onClick={scrollToWaitlist}>
             JOIN THE MOVEMENT <Ic name="ArrowRight" size={18} />
           </CTA>
           <p className="mt-3 text-xs uppercase tracking-widest text-[#FF5C00] font-bold">
