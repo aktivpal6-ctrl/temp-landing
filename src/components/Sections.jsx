@@ -560,7 +560,7 @@ export const Community = () => {
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-            03 — More than partners
+            More than partners
           </span>
           <h2 className="mt-4 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight leading-tight">
             We're building a community around movement.
