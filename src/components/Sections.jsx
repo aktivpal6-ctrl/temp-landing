@@ -444,7 +444,7 @@ export const ProductMoment = () => {
         <div className="lg:sticky lg:top-28 lg:h-[80vh] flex flex-col justify-center">
           <Reveal>
             <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-              02 — We've all said it
+              We've all said it
             </span>
             <h2 className="mt-4 font-display font-black text-[#1A1D1A] text-4xl md:text-5xl tracking-tighter leading-[1.02]">
               From "we should" to "let's go."
