@@ -95,7 +95,7 @@ export const WHO_FOR = [
 ];
 
 export const SAFETY = [
-  { icon: "BadgeCheck", title: "Verification", body: "Know who's verified." },
+  // { icon: "BadgeCheck", title: "Verification", body: "Know who's verified." },
   { icon: "IdCard", title: "Profiles", body: "See who you're meeting." },
   {
     icon: "History",
@@ -113,22 +113,22 @@ export const SAFETY = [
 export const STEPS = [
   {
     n: "01",
-    title: "Pick what moves you",
-    body: "Hiking, running, skiing, cycling, climbing, swimming — whatever gets you moving.",
+    title: "Movement is more than staying active.",
+    body: "It's the places you discover, the people you meet, and the stories you create.",
     image: IMAGES.climb,
     imageAlt: "Outdoor rock climber on a climbing route",
   },
   {
     n: "02",
-    title: "Find your people",
-    body: "Discover people who share your interests, your pace and your sense of adventure.",
+    title: "Find people who want to do what you want to do.",
+    body: "A weekend hike, morning run, ski day, or spontaneous adventure. Find the right people, make a plan, and go.",
     image: IMAGES.bike,
     imageAlt: "Cyclists riding together outdoors",
   },
   {
     n: "03",
-    title: "Make it happen",
-    body: "Join an activity or create your own. Less planning, less scrolling, more doing.",
+    title: 'Less scrolling. Less "we should." More doing.',
+    body: 'AKTIVPAL turns "sometime" into "this weekend."Create movement. Find your people. Move together.',
     image: IMAGES.ski,
     imageAlt: "Skier descending a snowy mountain slope",
   },
@@ -324,7 +324,7 @@ export const SURVEY = [
     label: "What would make you feel safer meeting someone through AKTIVPAL?",
     options: [
       "Government ID verification",
-      "Verified profile badge",
+      "Profile badge",
       "Ratings / reviews",
       "Seeing their previous activities",
       "Mutual connections",

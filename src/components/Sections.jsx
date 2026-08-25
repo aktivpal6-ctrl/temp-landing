@@ -189,7 +189,9 @@ export const Hero = () => {
       <motion.div
         style={{ opacity: fade }}
         onClick={() => {
-          ref.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
+          ref.current?.nextElementSibling?.scrollIntoView({
+            behavior: "smooth",
+          });
         }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[#F7F7F2]/50 z-10 cursor-pointer"
       >
@@ -325,7 +327,7 @@ export const HowItWorks = () => {
       data-testid="how-it-works"
     >
       <DriftNumeral
-        n="03"
+        n="01"
         y={y}
         dark
         className="text-[24rem] -right-14 top-6"
@@ -442,7 +444,7 @@ export const ProductMoment = () => {
         <div className="lg:sticky lg:top-28 lg:h-[80vh] flex flex-col justify-center">
           <Reveal>
             <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-              04 — We've all said it
+              02 — We've all said it
             </span>
             <h2 className="mt-4 font-display font-black text-[#1A1D1A] text-4xl md:text-5xl tracking-tighter leading-[1.02]">
               From "we should" to "let's go."
@@ -558,7 +560,7 @@ export const Community = () => {
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-            05 — More than partners
+            03 — More than partners
           </span>
           <h2 className="mt-4 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight leading-tight">
             We're building a community around movement.
@@ -658,11 +660,11 @@ export const Safety = () => {
       className="relative bg-[#0F291E] py-28 md:py-36 grain overflow-hidden"
       data-testid="safety"
     >
-      <DriftNumeral n="07" y={y} dark className="text-[24rem] -left-16 top-0" />
+      <DriftNumeral n="04" y={y} dark className="text-[24rem] -left-16 top-0" />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-            07 — Built for trust
+            Built for trust.
           </span>
           <h2 className="mt-4 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight max-w-3xl leading-[1.05]">
             Built for connection. Designed for trust.
@@ -701,7 +703,7 @@ export const Safety = () => {
           <p className="mt-14 text-lg md:text-xl text-[#F7F7F2]/80 max-w-3xl leading-relaxed border-l-4 border-[#FF5C00] pl-6">
             Unlike dating apps, the goal is simple:{" "}
             <strong className="font-display font-extrabold text-[#F7F7F2]">
-              find people who want to do something.
+              Find the people who want move with you.
             </strong>
           </p>
         </Reveal>
@@ -714,17 +716,17 @@ const FAQS = [
   {
     question: "What is AKTIVPAL?",
     answer:
-      "A free app for finding real people to hike, run, ski, cycle, climb, and swim with in British Columbia. No more 'we should do this sometime.'",
+      "AKTIVPAL helps you find the right people to move with. Whether you’re new to a place, struggling to make friends as an adult, or simply don’t have anyone who’s up for your next hike, run, ski day, or adventure, we make it easier to connect, make plans, and get moving together.",
   },
   {
     question: "Is it safe to meet someone through AKTIVPAL?",
     answer:
-      "You'll see who you're meeting before you go — verified profiles, activity history, and reviews from other members. Unlike dating apps, everyone's here for the same reason: to actually do something.",
+      "You'll see who you're meeting before you go — profiles, activity history, and reviews from other members. Unlike dating apps, everyone's here for the same reason: to actually do something.",
   },
   {
     question: "What activities can I do on AKTIVPAL?",
     answer:
-      "Hiking, running, skiing and snowboarding, cycling, climbing, swimming — and whatever adventure comes next.",
+      "Hiking, running, skiing and snowboarding, cycling, climbing, outdoor-walking — and many more! We're expanding from there.",
   },
   {
     question: "Where is AKTIVPAL available?",
@@ -802,7 +804,7 @@ export const FAQ = () => {
       <div className="max-w-3xl mx-auto px-6 relative z-10">
         <Reveal>
           <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00]">
-            08 — FAQ
+            FAQ
           </span>
           <h2 className="mt-4 font-display font-extrabold text-3xl md:text-5xl tracking-tight text-[#1A1D1A]">
             Questions before you get moving.
@@ -867,18 +869,12 @@ export const FinalCTA = () => {
             with. Or a friend you never would have met otherwise.
           </p>
         </Reveal>
-        <Reveal delay={0.15}>
-          <p className="mt-6 font-display font-black text-2xl md:text-3xl text-[#0F291E]">
-            Find your people. Move more.{" "}
-            <span className="text-[#FF5C00]">Experience more.</span>
-          </p>
-        </Reveal>
         <Reveal delay={0.2} className="mt-10">
           <CTA testId="finalcta-cta" onClick={scrollToSurvey}>
             JOIN AKTIVPAL <Ic name="ArrowRight" size={18} />
           </CTA>
           <p className="mt-4 text-sm text-[#4A524A]">
-            Starting in British Columbia. Built to connect people everywhere.
+            Starting in British Columbia.
           </p>
         </Reveal>
       </div>
@@ -896,10 +892,10 @@ export const ClosingFooter = ({ converted }) => (
       <Reveal>
         <Logo size={52} light />
         <h2 className="mt-8 font-display font-black text-[#F7F7F2] text-3xl md:text-5xl tracking-tight">
-          Find your people. Move together.
+          Movement is better together.{" "}
         </h2>
         <p className="mt-4 text-[#F7F7F2]/60 text-lg">
-          Starting in British Columbia. Built to connect people everywhere.
+          Starting in British Columbia.
         </p>
       </Reveal>
       {!converted && (

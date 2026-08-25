@@ -12,8 +12,8 @@ const Ic = ({ name, ...p }) => {
 };
 
 // Build the visible step list given current answers (conditional logic)
-const buildSteps = answers => {
-  return SURVEY.filter(q => {
+const buildSteps = (answers) => {
+  return SURVEY.filter((q) => {
     if (!q.condition) return true;
     const val = answers[q.condition.q];
     return q.condition.in.includes(val);
@@ -50,7 +50,7 @@ const ChoiceCard = ({ label, selected, onClick, testId }) => (
 const Scale = ({ value, low, high, onChange, testId }) => (
   <div className="mt-2">
     <div className="flex items-center justify-between gap-2">
-      {[1, 2, 3, 4, 5].map(n => (
+      {[1, 2, 3, 4, 5].map((n) => (
         <motion.button
           key={n}
           type="button"
@@ -99,14 +99,15 @@ export const Survey = ({ onComplete, standalone = false }) => {
   const progress = done ? 100 : Math.round((idx / total) * 100);
 
   const setAns = useCallback(
-    (id, val) => setAnswers(a => ({ ...a, [id]: val })),
+    (id, val) => setAnswers((a) => ({ ...a, [id]: val })),
     [],
   );
 
   const toggleMulti = (id, opt, max) => {
-    setAnswers(a => {
+    setAnswers((a) => {
       const cur = Array.isArray(a[id]) ? a[id] : [];
-      if (cur.includes(opt)) return { ...a, [id]: cur.filter(x => x !== opt) };
+      if (cur.includes(opt))
+        return { ...a, [id]: cur.filter((x) => x !== opt) };
       if (max && cur.length >= max) return a;
       return { ...a, [id]: [...cur, opt] };
     });
@@ -134,13 +135,13 @@ export const Survey = ({ onComplete, standalone = false }) => {
   const next = () => {
     if (idx < total - 1) {
       setDir(1);
-      setIdx(i => i + 1);
+      setIdx((i) => i + 1);
     } else submit();
   };
   const back = () => {
     if (idx > 0) {
       setDir(-1);
-      setIdx(i => i - 1);
+      setIdx((i) => i - 1);
     }
   };
 
@@ -148,9 +149,9 @@ export const Survey = ({ onComplete, standalone = false }) => {
     setSubmitting(true);
     setError(false);
     const payload = {
-      answers: SURVEY.filter(s =>
-        buildSteps(answers).find(v => v.id === s.id),
-      ).map(s => {
+      answers: SURVEY.filter((s) =>
+        buildSteps(answers).find((v) => v.id === s.id),
+      ).map((s) => {
         let ans = answers[s.id];
         if (s.allowOther && others[s.id]) {
           ans = Array.isArray(ans) ? [...ans, `Other: ${others[s.id]}`] : ans;
@@ -162,7 +163,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
     // include q6 followup
     if (answers.q6b)
       payload.answers.push({
-        question: SURVEY.find(x => x.id === "q6").followup.label,
+        question: SURVEY.find((x) => x.id === "q6").followup.label,
         answer: answers.q6b,
       });
 
@@ -186,9 +187,11 @@ export const Survey = ({ onComplete, standalone = false }) => {
   };
 
   const variants = {
-    enter: d => (reduce ? { opacity: 0 } : { x: d > 0 ? 60 : -60, opacity: 0 }),
+    enter: (d) =>
+      reduce ? { opacity: 0 } : { x: d > 0 ? 60 : -60, opacity: 0 },
     center: { x: 0, opacity: 1 },
-    exit: d => (reduce ? { opacity: 0 } : { x: d > 0 ? -60 : 60, opacity: 0 }),
+    exit: (d) =>
+      reduce ? { opacity: 0 } : { x: d > 0 ? -60 : 60, opacity: 0 },
   };
 
   const resetSurvey = () => {
@@ -279,15 +282,15 @@ export const Survey = ({ onComplete, standalone = false }) => {
                 { k: "email", ph: "Email *", type: "email" },
                 { k: "phone", ph: "Phone number (optional)", type: "tel" },
                 { k: "instagram", ph: "Instagram (optional)", type: "text" },
-              ].map(f => (
+              ].map((f) => (
                 <input
                   key={f.k}
                   data-testid={`contact-${f.k}`}
                   placeholder={f.ph}
                   type={f.type}
                   value={contact[f.k]}
-                  onChange={e =>
-                    setContact(c => ({ ...c, [f.k]: e.target.value }))
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, [f.k]: e.target.value }))
                   }
                   className="w-full p-4 rounded-2xl border-2 border-black/10 bg-white focus:border-[#FF5C00] outline-none text-[15px]"
                 />
@@ -397,7 +400,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                   >
                     {/* SINGLE */}
                     {q.type === "single" &&
-                      q.options.map(opt => (
+                      q.options.map((opt) => (
                         <motion.div
                           key={opt}
                           variants={{
@@ -417,7 +420,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                     {/* MULTI */}
                     {q.type === "multi" && (
                       <>
-                        {q.options.map(opt => (
+                        {q.options.map((opt) => (
                           <motion.div
                             key={opt}
                             variants={{
@@ -438,8 +441,11 @@ export const Survey = ({ onComplete, standalone = false }) => {
                             data-testid={`survey-other-${q.id}`}
                             placeholder="Other (optional)…"
                             value={others[q.id] || ""}
-                            onChange={e =>
-                              setOthers(o => ({ ...o, [q.id]: e.target.value }))
+                            onChange={(e) =>
+                              setOthers((o) => ({
+                                ...o,
+                                [q.id]: e.target.value,
+                              }))
                             }
                             className="w-full p-4 rounded-2xl border-2 border-black/10 bg-white focus:border-[#FF5C00] outline-none text-[15px]"
                           />
@@ -453,7 +459,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                         value={answers[q.id]}
                         low={q.low}
                         high={q.high}
-                        onChange={n => setAns(q.id, n)}
+                        onChange={(n) => setAns(q.id, n)}
                         testId={`survey-scale-${q.id}`}
                       />
                     )}
@@ -465,7 +471,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                         rows={q.emphasis ? 5 : 4}
                         placeholder="Type your answer…"
                         value={answers[q.id] || ""}
-                        onChange={e => setAns(q.id, e.target.value)}
+                        onChange={(e) => setAns(q.id, e.target.value)}
                         className={`w-full p-4 rounded-2xl border-2 bg-white outline-none text-[15px] leading-relaxed resize-none focus:border-[#FF5C00] ${
                           q.emphasis ? "border-[#FF5C00]/40" : "border-black/10"
                         }`}
@@ -482,7 +488,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
                           data-testid="survey-text-q6b"
                           rows={3}
                           value={answers.q6b || ""}
-                          onChange={e => setAns("q6b", e.target.value)}
+                          onChange={(e) => setAns("q6b", e.target.value)}
                           placeholder="Optional, but really helpful…"
                           className="w-full p-4 rounded-2xl border-2 border-[#FF5C00]/40 bg-white outline-none text-[15px] resize-none focus:border-[#FF5C00]"
                         />
@@ -588,7 +594,7 @@ export const Survey = ({ onComplete, standalone = false }) => {
               <span className="text-[#FF5C00]">AKTIVPAL.</span>
             </p>
             <p className="mt-6 text-sm font-semibold tracking-wide text-[#4A524A]">
-              "Find your people. Move together." — AKTIVPAL
+              "Movement is better together." — AKTIVPAL
             </p>
             {standalone && (
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">

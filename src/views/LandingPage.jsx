@@ -36,8 +36,11 @@ const StickyCTA = ({ visible }) => {
           <div className="max-w-3xl mx-auto flex items-center justify-between gap-4 rounded-2xl bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-3 md:px-6 md:py-4">
             <div className="flex items-center gap-3 min-w-0">
               <Logo size={30} />
-              <span className="hidden sm:block font-display font-bold text-[#0F291E] truncate" data-testid="sticky-cta-text">
-                Find your people. Move together.
+              <span
+                className="hidden sm:block font-display font-bold text-[#0F291E] truncate"
+                data-testid="sticky-cta-text"
+              >
+                Movement is better together.{" "}
               </span>
             </div>
             <motion.button
@@ -78,7 +81,10 @@ export const LandingPage = () => {
   useEffect(() => {
     const onScroll = () => {
       const heroPassed = window.scrollY > window.innerHeight * 0.9;
-      const footerTop = document.querySelector('[data-testid="footer"]')?.getBoundingClientRect().top ?? Infinity;
+      const footerTop =
+        document
+          .querySelector('[data-testid="footer"]')
+          ?.getBoundingClientRect().top ?? Infinity;
       const footerReached = footerTop < window.innerHeight * 0.88;
       setShowSticky(heroPassed && !footerReached);
     };
@@ -94,15 +100,13 @@ export const LandingPage = () => {
       <TrailRail />
 
       <Hero />
-      <Problem />
-      <MatchCriteria />
+
       <HowItWorks />
       <ProductMoment />
       <Community />
-      <ActivitiesGrid />
       <Safety />
       <FAQ />
-      <FinalCTA />
+      {/* <FinalCTA /> */}
       <ClosingFooter converted={false} />
 
       <StickyCTA visible={showSticky} />
