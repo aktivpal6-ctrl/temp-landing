@@ -2,7 +2,7 @@ import "@/index.css";
 import { Providers } from "./providers";
 
 export const metadata = {
-  title: "AKTIVPAL — Find your people. Move together.",
+  title: "AKTIVPAL — Movement is better together.",
   description:
     "AKTIVPAL — Find your people. Move together. The easiest way to find the right people to hike, run, ride, climb, ski and explore with in Canada.",
 };

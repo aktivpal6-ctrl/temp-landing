@@ -1,11 +1,15 @@
 // app/sitemap.js
 export default function sitemap() {
   const base = "https://www.aktivpal.com";
-  const routes = ["", "/about", "/community", "/safety", "/contact"];
-  return routes.map(path => ({
+  const routes = [
+    { path: "", changeFrequency: "weekly", priority: 1.0 },
+    { path: "/survey", changeFrequency: "weekly", priority: 0.8 },
+  ];
+
+  return routes.map(({ path, changeFrequency, priority }) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.7,
+    changeFrequency,
+    priority,
   }));
 }

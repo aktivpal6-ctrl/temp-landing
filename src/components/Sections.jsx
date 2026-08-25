@@ -110,23 +110,54 @@ export const Hero = () => {
 
         <motion.div
           style={{ opacity: fade }}
-          className="flex-1 flex flex-col justify-center max-w-4xl mt-16"
+          className="flex-1 flex flex-col items-center justify-center text-center mt-10"
         >
           <motion.span
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00] mb-6"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00] mb-8 border border-[#FF5C00]/30 rounded-full px-5 py-2.5 backdrop-blur-sm"
           >
-            <span className="w-8 h-px bg-[#FF5C00]" /> Life happens when you
-            move
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
+            Life happens when you move
           </motion.span>
 
-          <h1 className="font-display font-black text-[#F7F7F2] tracking-tighter leading-[0.92] text-5xl sm:text-6xl md:text-7xl lg:text-[6.5rem]">
-            <MaskedLines
-              lines={["Find your people.", "Move together."]}
-              delay={0.25}
-            />
+          <h1 className="font-display max-w-4xl">
+            <span className="flex flex-wrap items-baseline justify-center gap-x-[0.28em] gap-y-1 font-black tracking-tighter leading-[0.92] text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem]">
+              <span className="text-[#F7F7F2]">
+                <MaskedLines lines={["Movement is better"]} delay={0.25} />
+              </span>
+              <span className="relative text-[#FF5C00]">
+                <MaskedLines lines={["together."]} delay={0.38} />
+                <motion.svg
+                  viewBox="0 0 220 16"
+                  className="absolute left-0 -bottom-2 md:-bottom-3 w-full h-[10px] md:h-[14px] pointer-events-none"
+                  aria-hidden
+                >
+                  <motion.path
+                    d="M2 10 C 40 2, 80 14, 120 6 S 190 2, 218 9"
+                    stroke="#FF5C00"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    fill="none"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 0.6 }}
+                    transition={{
+                      delay: 1,
+                      duration: 0.7,
+                      ease: [0.65, 0, 0.35, 1],
+                    }}
+                  />
+                </motion.svg>
+              </span>
+            </span>
+
+            <span className="block max-w-2xl mx-auto mt-3 md:mt-4 font-medium italic tracking-tight leading-snug text-[#F7F7F2]/55 text-xl sm:text-2xl md:text-[1.75rem]">
+              <MaskedLines
+                lines={["Some of your best people are still strangers."]}
+                delay={0.55}
+              />
+            </span>
           </h1>
 
           <motion.p
@@ -135,26 +166,15 @@ export const Hero = () => {
             transition={{ delay: 0.75, duration: 0.6 }}
             className="mt-7 text-lg md:text-xl text-[#F7F7F2]/80 max-w-2xl leading-relaxed"
           >
-            AKTIVPAL is a free app that helps you find real people to hike, run,
-            ski, cycle, climb, and swim within British Columbia—no more “we
-            should do this sometime.” Go for the hike. Run that trail. Ski that
-            mountain. Explore somewhere new.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.6 }}
-            className="mt-3 text-base text-[#F7F7F2]/60 max-w-xl"
-          >
-            You don't always need a plan. Sometimes, you just need the right
-            people. AKTIVPAL helps you find them.
+            From a morning run to a mountain adventure, find the right people to
+            move with.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.95, duration: 0.6 }}
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="mt-10 flex flex-col items-center gap-4"
           >
             <CTA testId="hero-cta" onClick={scrollToSurvey}>
               JOIN THE MOVEMENT <Ic name="ArrowRight" size={18} />
@@ -168,7 +188,10 @@ export const Hero = () => {
 
       <motion.div
         style={{ opacity: fade }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[#F7F7F2]/50 z-10"
+        onClick={() => {
+          ref.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[#F7F7F2]/50 z-10 cursor-pointer"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
@@ -202,24 +225,14 @@ export const Problem = () => {
         </span>
         <Reveal delay={0.05}>
           <h2 className="mt-6 font-display font-black text-[#F7F7F2] text-4xl md:text-6xl tracking-tighter leading-[0.95] text-balance">
-            There's more to being active than working out.
+            Movement is more than staying active. It’s the places you discover,
+            people you meet, and stories you create
           </h2>
         </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mt-8 text-xl md:text-2xl text-[#F7F7F2]/70 max-w-2xl leading-relaxed">
-            It's about the places you discover, the people you meet, and the
-            stories you create along the way.
-          </p>
-        </Reveal>
-        <Reveal delay={0.15}>
-          <p className="mt-6 text-2xl md:text-3xl font-display font-bold text-[#F7F7F2]">
-            But finding someone who actually wants to do it with you?{" "}
-            <span className="text-[#FF5C00]">That's the hard part.</span>
-          </p>
-        </Reveal>
+
         <Reveal delay={0.2}>
           <p className="mt-6 text-lg text-[#F7F7F2]/60">
-            AKTIVPAL makes it easier.
+            AKTIVPAL helps you find the right people to move with.
           </p>
         </Reveal>
       </div>
@@ -502,7 +515,7 @@ export const ProductMoment = () => {
                 </div>
                 <div className="mt-5 flex items-center gap-3">
                   <div className="flex -space-x-2">
-                    {[0, 1, 2].map(n => (
+                    {[0, 1, 2].map((n) => (
                       <div
                         key={n}
                         className="w-8 h-8 rounded-full border-2 border-[#0F291E] bg-gradient-to-br from-[#FF5C00] to-[#16382A]"
@@ -558,7 +571,7 @@ export const Community = () => {
           viewport={{ once: true }}
           className="mt-10 flex flex-wrap justify-center gap-3"
         >
-          {COMMUNITY_TAGS.map(t => (
+          {COMMUNITY_TAGS.map((t) => (
             <motion.span
               key={t.label}
               variants={item}
@@ -768,7 +781,7 @@ export const FAQ = () => {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQS.map(f => ({
+    mainEntity: FAQS.map((f) => ({
       "@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
