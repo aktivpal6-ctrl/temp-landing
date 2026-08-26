@@ -28,6 +28,22 @@ const nextConfig = {
         destination: "https://www.aktivpal.com/:path*",
         permanent: true,
       },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.aktivpal.com",
+          },
+          {
+            type: "header",
+            key: "x-forwarded-proto",
+            value: "http",
+          },
+        ],
+        destination: "https://www.aktivpal.com/:path*",
+        permanent: true,
+      },
     ];
   },
 };

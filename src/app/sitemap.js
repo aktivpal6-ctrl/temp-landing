@@ -1,6 +1,8 @@
-// app/sitemap.js
+/** @type {import('next').MetadataRoute.Sitemap} */
 export default function sitemap() {
   const base = "https://www.aktivpal.com";
+
+  /** @type {Array<{path: string, changeFrequency: 'always'|'hourly'|'daily'|'weekly'|'monthly'|'yearly'|'never', priority: number}>} */
   const routes = [
     { path: "", changeFrequency: "weekly", priority: 1.0 },
     { path: "/waitlist", changeFrequency: "weekly", priority: 0.8 },
