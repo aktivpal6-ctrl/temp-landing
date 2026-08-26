@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 // AKTIVPAL logo mark — mountain peak + sun, dark green & orange
@@ -21,16 +21,48 @@ export const Logo = ({ size = 40, showWord = false, light = false }) => (
   </div>
 );
 
-// Scroll reveal wrapper (fires once)
+// Scroll reveal wrapper — CSS animation driven by IntersectionObserver (iOS-safe)
 export const Reveal = ({ children, delay = 0, y = 28, x = 0, className = "", as = "div" }) => {
   const reduce = useReducedMotion();
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (reduce || inView) return;
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduce, inView]);
+
+  const revealClass = x > 0 ? "ap-reveal-right" : "ap-reveal";
+  const motionClass = inView ? `${revealClass} ap-in-view` : revealClass;
+
+  // Framer Motion still drives the spring feel when available;
+  // CSS class is the fallback that guarantees visibility on iOS.
   const MotionTag = motion[as] || motion.div;
+
   return (
     <MotionTag
-      className={className}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y, x }}
-      whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      ref={ref}
+      className={`${motionClass} ${className}`}
+      initial={reduce ? { opacity: 1 } : { opacity: 0, y, x }}
+      animate={inView ? { opacity: 1, y: 0, x: 0 } : undefined}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
@@ -38,28 +70,90 @@ export const Reveal = ({ children, delay = 0, y = 28, x = 0, className = "", as 
   );
 };
 
-// Staggered container/item
+// Staggered container/item — CSS + Framer Motion hybrid for iOS safety
 export const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
 export const item = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
-// Line-by-line masked reveal for headlines
+// Wrapper that ensures stagger children become visible via CSS even if
+// Framer Motion's whileInView never fires on iOS in-app browsers.
+export const Stagger = ({ children, className = "", margin = "-60px" }) => {
+  const reduce = useReducedMotion();
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (reduce || inView) return;
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: margin },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduce, inView, margin]);
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin }}
+      className={className}
+      style={
+        inView
+          ? undefined
+          : reduce
+            ? { opacity: 1 }
+            : { opacity: 0 }
+      }
+    >
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, {
+              className: `${child.props.className || ""} ap-stagger-item${inView ? " ap-in-view" : ""}`,
+            })
+          : child,
+      )}
+    </motion.div>
+  );
+};
+
+// Line-by-line masked reveal for headlines — pure CSS animation for iOS reliability
 export const MaskedLines = ({ lines, className = "", delay = 0 }) => {
   const reduce = useReducedMotion();
   return (
     <span className={className}>
       {lines.map((line, i) => (
         <span key={i} className="block overflow-hidden">
-          <motion.span
+          <span
             className="block"
-            initial={reduce ? { opacity: 0 } : { y: "110%" }}
-            animate={reduce ? { opacity: 1 } : { y: "0%" }}
-            transition={{ duration: 0.75, delay: delay + i * 0.11, ease: [0.22, 1, 0.36, 1] }}
+            style={
+              reduce
+                ? { opacity: 1 }
+                : {
+                    transform: "translateY(110%)",
+                    animation: `masked-reveal 0.75s ${delay + i * 0.11}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                  }
+            }
           >
             {line}
-          </motion.span>
+          </span>
         </span>
       ))}
     </span>

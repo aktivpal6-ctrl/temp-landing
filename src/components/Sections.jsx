@@ -14,7 +14,7 @@ import {
   Reveal,
   MaskedLines,
   CTA,
-  stagger,
+  Stagger,
   item,
   scrollToWaitlist,
 } from "./primitives";
@@ -96,31 +96,26 @@ export const Hero = () => {
         style={{ y: yContent }}
         className="relative z-10 max-w-6xl mx-auto px-6 pt-8 pb-24 min-h-[100svh] flex flex-col"
       >
-        <motion.header
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center justify-between"
+        <header
+          className="flex items-center justify-between ap-hero-reveal ap-in-view"
         >
           <Logo size={38} showWord light />
           <span className="hidden sm:inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-[#F7F7F2]/70 border border-white/15 rounded-full px-4 py-2 backdrop-blur-sm">
             <Ic name="MapPin" size={14} className="text-[#FF5C00]" /> Canada
           </span>
-        </motion.header>
+        </header>
 
         <motion.div
           style={{ opacity: fade }}
           className="flex-1 flex flex-col items-center justify-center text-center mt-10"
         >
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00] mb-8 border border-[#FF5C00]/30 rounded-full px-5 py-2.5 backdrop-blur-sm"
+          <span
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-[#FF5C00] mb-8 border border-[#FF5C00]/30 rounded-full px-5 py-2.5 backdrop-blur-sm ap-hero-reveal ap-in-view"
+            style={{ animationDelay: "0.15s" }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#FF5C00]" />
             Life happens when you move
-          </motion.span>
+          </span>
 
           <h1 className="font-display max-w-4xl">
             <span className="flex flex-wrap items-baseline justify-center gap-x-[0.28em] gap-y-1 font-black tracking-tighter leading-[0.92] text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem]">
@@ -160,21 +155,17 @@ export const Hero = () => {
             </span>
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.6 }}
-            className="mt-7 text-lg md:text-xl text-[#F7F7F2]/80 max-w-2xl leading-relaxed"
+          <p
+            className="mt-7 text-lg md:text-xl text-[#F7F7F2]/80 max-w-2xl leading-relaxed ap-hero-reveal ap-in-view"
+            style={{ animationDelay: "0.75s" }}
           >
             From a morning run to a mountain adventure, find the right people to
             move with.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.95, duration: 0.6 }}
-            className="mt-10 flex flex-col items-center gap-4"
+          <div
+            className="mt-10 flex flex-col items-center gap-4 ap-hero-reveal ap-in-view"
+            style={{ animationDelay: "0.95s" }}
           >
             <CTA testId="hero-cta" onClick={scrollToWaitlist}>
               JOIN THE MOVEMENT <Ic name="ArrowRight" size={18} />
@@ -182,7 +173,7 @@ export const Hero = () => {
             <span className="text-sm text-[#F7F7F2]/50 font-medium">
               Starting in British Columbia
             </span>
-          </motion.div>
+          </div>
         </motion.div>
       </motion.div>
 
@@ -265,11 +256,7 @@ export const MatchCriteria = () => {
             there.
           </p>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+        <Stagger
           className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
         >
           {MATCH_CRITERIA.map((c, i) => (
@@ -292,7 +279,7 @@ export const MatchCriteria = () => {
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );
@@ -341,11 +328,7 @@ export const HowItWorks = () => {
             Less planning. Less scrolling. More doing.
           </h2>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+        <Stagger
           className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6"
         >
           {STEPS.map((s, i) => {
@@ -387,7 +370,7 @@ export const HowItWorks = () => {
               </motion.div>
             );
           })}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );
@@ -566,11 +549,7 @@ export const Community = () => {
             We're building a community around movement.
           </h2>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
+        <Stagger
           className="mt-10 flex flex-wrap justify-center gap-3"
         >
           {COMMUNITY_TAGS.map((t) => (
@@ -583,7 +562,7 @@ export const Community = () => {
               {t.label}
             </motion.span>
           ))}
-        </motion.div>
+        </Stagger>
         <Reveal delay={0.1}>
           <p className="mt-12 text-xl md:text-2xl font-display font-bold text-[#F7F7F2]">
             The best part of an adventure…{" "}
@@ -614,11 +593,7 @@ export const ActivitiesGrid = () => {
             One community. Endless possibilities.
           </h2>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+        <Stagger
           className="mt-14 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"
         >
           {ACTIVITIES.map((a, i) => (
@@ -645,7 +620,7 @@ export const ActivitiesGrid = () => {
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );
@@ -673,11 +648,7 @@ export const Safety = () => {
             Meeting new people should feel exciting — not uncertain.
           </p>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+        <Stagger
           className="mt-14 grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5"
         >
           {SAFETY.map((c, i) => (
@@ -698,7 +669,7 @@ export const Safety = () => {
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </Stagger>
         <Reveal delay={0.1}>
           <p className="mt-14 text-lg md:text-xl text-[#F7F7F2]/80 max-w-3xl leading-relaxed border-l-4 border-[#FF5C00] pl-6">
             Unlike dating apps, the goal is simple:{" "}
@@ -810,11 +781,7 @@ export const FAQ = () => {
             Questions before you get moving.
           </h2>
         </Reveal>
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+        <Stagger
           className="mt-14 space-y-4"
         >
           {FAQS.map((faq, i) => (
@@ -826,7 +793,7 @@ export const FAQ = () => {
               onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
             />
           ))}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );
