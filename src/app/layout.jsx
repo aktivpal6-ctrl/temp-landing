@@ -8,6 +8,35 @@ export const metadata = {
   title: "AKTIVPAL — Movement is better together.",
   description:
     "AKTIVPAL — Movement is better together. The easiest way to find the right people to hike, run, ride, climb, ski and explore with in Canada.",
+  metadataBase: new URL("https://www.aktivpal.com"),
+  openGraph: {
+    title: "AKTIVPAL — Movement is better together.",
+    description:
+      "AKTIVPAL helps you find the right people to hike, run, ride, climb, ski and explore with in Canada. Join the movement.",
+    url: "https://www.aktivpal.com",
+    siteName: "AKTIVPAL",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AKTIVPAL — Movement is better together.",
+      },
+    ],
+    locale: "en_CA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AKTIVPAL — Movement is better together.",
+    description:
+      "AKTIVPAL helps you find the right people to hike, run, ride, climb, ski and explore with in Canada. Join the movement.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
 };
 
 export const viewport = {
@@ -56,8 +85,10 @@ export default function RootLayout({ children }) {
               "@type": "Organization",
               name: "AKTIVPAL",
               url: "https://www.aktivpal.com",
+              logo: "https://www.aktivpal.com/images/aktivpal.png",
               description:
                 "AKTIVPAL helps you find people to hike, run, ski, climb, and explore with in Canada.",
+              sameAs: [],
             }),
           }}
         />
