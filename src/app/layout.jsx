@@ -83,11 +83,22 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://www.aktivpal.com/#organization",
               name: "AKTIVPAL",
               url: "https://www.aktivpal.com",
-              logo: "https://www.aktivpal.com/images/aktivpal.png",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.aktivpal.com/images/aktivpal.png",
+                width: 512,
+                height: 512,
+              },
               description:
-                "AKTIVPAL helps you find people to hike, run, ski, climb, and explore with in Canada.",
+                "AKTIVPAL helps you find people to hike, run, ski, climb, cycle, and explore with in Canada. Starting in British Columbia.",
+              foundingDate: "2024",
+              areaServed: {
+                "@type": "Country",
+                name: "Canada",
+              },
               sameAs: [],
             }),
           }}

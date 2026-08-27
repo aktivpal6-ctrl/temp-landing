@@ -751,26 +751,12 @@ export const FAQ = () => {
   const { ref, y } = useDrift(100);
   const [openIndex, setOpenIndex] = useState(0); // first question open on load
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
-  };
-
   return (
     <section
       ref={ref}
       className="relative bg-[#F7F7F2] py-28 md:py-36 overflow-hidden"
       data-testid="faq"
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <DriftNumeral n="05" y={y} className="text-[24rem] -right-16 top-0" />
       <div className="max-w-3xl mx-auto px-6 relative z-10">
         <Reveal>

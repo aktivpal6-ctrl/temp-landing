@@ -32,6 +32,52 @@ export const metadata = {
   },
 };
 
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "AKTIVPAL Early Access — Join the Waitlist",
+  description:
+    "Sign up for early access to AKTIVPAL. Be one of the first to find activity partners in Canada.",
+  url: "https://www.aktivpal.com/waitlist",
+  inLanguage: "en-CA",
+  isPartOf: {
+    "@type": "Organization",
+    name: "AKTIVPAL",
+    url: "https://www.aktivpal.com",
+  },
+};
+
+const breadcrumbsSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.aktivpal.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Waitlist",
+      item: "https://www.aktivpal.com/waitlist",
+    },
+  ],
+};
+
 export default function Page() {
-  return <WaitlistPage />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
+      <WaitlistPage />
+    </>
+  );
 }
