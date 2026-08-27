@@ -96,15 +96,6 @@ export const Hero = () => {
         style={{ y: yContent }}
         className="relative z-10 max-w-6xl mx-auto px-6 pt-8 pb-24 min-h-[100svh] flex flex-col"
       >
-        <header
-          className="flex items-center justify-between ap-hero-reveal ap-in-view"
-        >
-          <Logo size={38} showWord light />
-          <span className="hidden sm:inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-[#F7F7F2]/70 border border-white/15 rounded-full px-4 py-2 backdrop-blur-sm">
-            <Ic name="MapPin" size={14} className="text-[#FF5C00]" /> Canada
-          </span>
-        </header>
-
         <motion.div
           style={{ opacity: fade }}
           className="flex-1 flex flex-col items-center justify-center text-center mt-10"

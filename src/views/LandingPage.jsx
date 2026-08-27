@@ -17,6 +17,7 @@ import {
   FinalCTA,
   ClosingFooter,
 } from "@/components/Sections";
+import { Nav } from "@/components/Nav";
 import { PageAtmosphere } from "@/components/atmosphere";
 import { TrailRail } from "@/components/TrailRail";
 import { Logo, scrollToWaitlist } from "@/components/primitives";
@@ -65,7 +66,7 @@ export const LandingPage = () => {
 
   useEffect(() => {
     if (reduce) return;
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    const lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     let raf;
     const loop = (t) => {
       lenis.raf(t);
@@ -98,6 +99,7 @@ export const LandingPage = () => {
     <div className="App relative" data-testid="landing-page">
       <PageAtmosphere />
       <TrailRail />
+      <Nav />
 
       <Hero />
 

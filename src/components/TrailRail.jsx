@@ -30,7 +30,7 @@ function buildTrail(h) {
   return d;
 }
 
-export const TrailRail = () => {
+export const TrailRail = ({ chapters = CHAPTERS }) => {
   const reduce = useReducedMotion();
   const [vh, setVh] = useState(820);
   const pathRef = useRef(null);
@@ -64,7 +64,7 @@ export const TrailRail = () => {
       if (!p) return;
       const total = p.getTotalLength();
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const wps = CHAPTERS.map((c) => {
+      const wps = chapters.map((c) => {
         const el = document.querySelector(`[data-testid="${c.id}"]`);
         if (!el) return null;
         const top = el.getBoundingClientRect().top + window.scrollY;

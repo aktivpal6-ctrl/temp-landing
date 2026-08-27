@@ -48,14 +48,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <Script
-          src="https://cdn.consentmanager.net/delivery/autoblocking/56ad0c0c62a2c.js"
-          data-cmp-ab="1"
-          data-cmp-host="b.delivery.consentmanager.net"
-          data-cmp-cdn="cdn.consentmanager.net"
-          data-cmp-codesrc="16"
-          strategy="beforeInteractive"
-        />
-        <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
