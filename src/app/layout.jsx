@@ -1,8 +1,24 @@
 import "@/index.css";
 import Script from "next/script";
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "./providers";
 
 const GA_ID = "G-CEH9SBXJSJ";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  variable: "--font-outfit",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-plus-jakarta",
+});
 
 export const metadata = {
   title: "AKTIVPAL — Movement is better together.",
@@ -43,9 +59,45 @@ export const viewport = {
   themeColor: "#0F291E",
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://www.aktivpal.com/#organization",
+  name: "AKTIVPAL",
+  url: "https://www.aktivpal.com",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://www.aktivpal.com/images/aktivpal.png",
+    width: 512,
+    height: 512,
+  },
+  description:
+    "AKTIVPAL helps you find people to hike, run, ski, climb, cycle, and explore with in Canada. Starting in British Columbia.",
+  foundingDate: "2024",
+  areaServed: {
+    "@type": "Country",
+    name: "Canada",
+  },
+  // TODO: Add real social media URLs once profiles are created
+  sameAs: [],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "AKTIVPAL",
+  url: "https://www.aktivpal.com",
+  inLanguage: "en-CA",
+  publisher: {
+    "@type": "Organization",
+    "@id": "https://www.aktivpal.com/#organization",
+  },
+  // TODO: Add SearchAction if a search endpoint is implemented
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
       <head>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -59,40 +111,16 @@ export default function RootLayout({ children }) {
             gtag('config', '${GA_ID}');
           `}
         </Script>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap"
-          rel="stylesheet"
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "@id": "https://www.aktivpal.com/#organization",
-              name: "AKTIVPAL",
-              url: "https://www.aktivpal.com",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://www.aktivpal.com/images/aktivpal.png",
-                width: 512,
-                height: 512,
-              },
-              description:
-                "AKTIVPAL helps you find people to hike, run, ski, climb, cycle, and explore with in Canada. Starting in British Columbia.",
-              foundingDate: "2024",
-              areaServed: {
-                "@type": "Country",
-                name: "Canada",
-              },
-              sameAs: [],
-            }),
+            __html: JSON.stringify(websiteSchema),
           }}
         />
       </head>

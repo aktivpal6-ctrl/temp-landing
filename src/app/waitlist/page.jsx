@@ -18,6 +18,7 @@ export const metadata = {
         alt: "AKTIVPAL — Join the Waitlist",
       },
     ],
+    locale: "en_CA",
     type: "website",
   },
   twitter: {

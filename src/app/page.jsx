@@ -18,6 +18,7 @@ export const metadata = {
         alt: "AKTIVPAL — Movement is better together.",
       },
     ],
+    locale: "en_CA",
     type: "website",
   },
   twitter: {

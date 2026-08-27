@@ -209,6 +209,7 @@ const ChapterThree = () => (
 
 const Mission = () => (
   <section data-testid="chapter-04" className="relative overflow-hidden bg-[#0F291E] py-28 md:py-40">
+    {/* TODO: Convert to next/image with fill + sizes for automatic lazy loading and CLS prevention. Decorative background image — no SEO impact, but performance benefit. */}
     <img src={IMG.forest} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover opacity-[0.95]" />
     <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E] via-[#0F291E]/80 to-[#0F291E]" />
     <Numeral dark value="04" className="-top-6 left-0 opacity-70 md:left-6" />

@@ -18,6 +18,7 @@ export const metadata = {
         alt: "About AKTIVPAL",
       },
     ],
+    locale: "en_CA",
     type: "website",
   },
   twitter: {
