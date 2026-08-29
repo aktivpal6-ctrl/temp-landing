@@ -18,6 +18,7 @@ import {
   item,
   scrollToWaitlist,
 } from "./primitives";
+import { Footer } from "./Footer";
 import { useDrift } from "./atmosphere";
 import {
   IMAGES,
@@ -866,33 +867,8 @@ export const ClosingFooter = ({ converted }) => (
         </Reveal>
       )}
     </div>
-    <div className="border-t border-white/10 relative z-10">
-      <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Logo size={26} light />
-          <span className="text-sm text-[#F7F7F2]/50">
-            "Your people for movement."
-          </span>
-        </div>
-        <nav className="flex items-center gap-6 text-sm text-[#F7F7F2]/60">
-          {[
-            { label: "About", href: "/about" },
-            { label: "Community", href: "/community" },
-            { label: "Safety", href: "/safety" },
-            { label: "Contact", href: "/contact" },
-          ].map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              className="hover:text-[#FF5C00] transition-colors"
-              data-testid={`footer-link-${label.toLowerCase()}`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-        <span className="text-sm text-[#F7F7F2]/40">© 2026 AKTIVPAL</span>
-      </div>
+    <div className="border-t border-white/10">
+      <Footer variant="dark" />
     </div>
   </footer>
 );
