@@ -1,6 +1,8 @@
 "use client";
 
-import { Clock, MapPin, Timer, Users, X, ExternalLink } from "lucide-react";
+import { Clock, MapPin, Timer, Users, X, ExternalLink, Share2, Check } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { ImageCarousel } from "./ImageCarousel";
 import { JoinButton } from "./JoinButton";
@@ -19,6 +21,34 @@ const DetailRow = ({ icon: Icon, label, value, testid }) => (
     </div>
   </div>
 );
+
+function ShareButton({ eventId }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/movement?event=${eventId}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success("Link copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy link");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleShare}
+      className="absolute right-16 top-4 z-20 grid h-10 w-10 place-items-center rounded-full bg-[#0F291E]/55 text-white backdrop-blur-md transition-colors duration-300 hover:bg-[#0F291E]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+      aria-label="Share event"
+    >
+      {copied ? <Check className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
+    </button>
+  );
+}
 
 export const EventDetailDrawer = ({ event, open, onOpenChange, onOpenJoinModal, joined = false }) => {
   const fullDate = event
@@ -63,6 +93,7 @@ export const EventDetailDrawer = ({ event, open, onOpenChange, onOpenJoinModal, 
               <X className="h-5 w-5" />
               <span className="sr-only">Close</span>
             </SheetClose>
+            <ShareButton eventId={event._id} />
             <div className="relative aspect-[4/3] w-full shrink-0">
               <ImageCarousel images={event.images} alt={event.title} testid={`detail-${event._id}-carousel`} />
               <span

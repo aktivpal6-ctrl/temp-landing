@@ -43,9 +43,10 @@ export const CanadaBuilt = () => (
             className="mt-8 max-w-2xl text-base leading-relaxed text-[#4A524A] md:text-lg"
           >
             AKTIVPAL is being shaped right here at home — for people across
-            Canada who want to move more, meet real people, and make the outdoors
-            feel more open, social, and possible. From British Columbia outward,
-            every decision is rooted in the way we explore this country.
+            Canada who want to move more, meet real people, and make the
+            outdoors feel more open, social, and possible. From British Columbia
+            outward, every decision is rooted in the way we explore this
+            country.
           </p>
         </Reveal>
         <Reveal delay={0.24}>
@@ -115,7 +116,7 @@ export const CanadaBuilt = () => (
                   Canada-first
                 </p>
                 <p className="font-display text-lg font-extrabold tracking-tight text-[#F7F7F2]">
-                  Made for the North
+                  Proudly Canadian
                 </p>
               </div>
             </div>

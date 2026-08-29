@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, MapPin, Timer, Users, ExternalLink } from "lucide-react";
+import { Clock, MapPin, Timer, Users, ExternalLink, Share2, Check } from "lucide-react";
+import { toast } from "sonner";
 import { ImageCarousel } from "./ImageCarousel";
 import { JoinButton } from "./JoinButton";
 import { DIFFICULTY_STYLES } from "./constants";
@@ -16,6 +18,8 @@ const MetaRow = ({ icon: Icon, children, testid }) => (
 );
 
 export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, index = 0 }) => {
+  const [copied, setCopied] = useState(false);
+
   const startLabel = new Date(event.start_time).toLocaleString("en-CA", {
     weekday: "short",
     month: "short",
@@ -26,6 +30,19 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
 
   const deadline = event.join_deadline || event.start_time;
   const joinExpired = deadline && new Date(deadline) < new Date();
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/movement?event=${event._id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success("Link copied!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
 
   return (
     <motion.article
@@ -48,6 +65,13 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
         >
           {event.difficulty}
         </span>
+        <button
+          onClick={handleShare}
+          className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full bg-[#0F291E]/55 text-white backdrop-blur-md transition-colors duration-300 hover:bg-[#0F291E]/80"
+          aria-label="Share event"
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+        </button>
       </div>
 
       <div className="flex flex-1 flex-col p-6">

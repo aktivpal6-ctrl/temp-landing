@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Lenis from "lenis";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -26,12 +27,25 @@ const CardSkeleton = () => (
   </div>
 );
 
-export default function MovementPage() {
+function MovementContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [joinedIds, setJoinedIds] = useState(() => new Set());
   const [joinModalEventId, setJoinModalEventId] = useState(null);
+  const [initialEventId] = useState(() => searchParams.get("event"));
+
+  const openDrawer = useCallback((id) => {
+    setSelectedId(id);
+    router.replace(`/movement?event=${id}`, { scroll: false });
+  }, [router]);
+
+  const closeDrawer = useCallback(() => {
+    setSelectedId(null);
+    router.replace("/movement", { scroll: false });
+  }, [router]);
 
   const selectedEvent = events.find((e) => e._id === selectedId) || null;
   const joinModalEvent = events.find((e) => e._id === joinModalEventId) || null;
@@ -64,6 +78,15 @@ export default function MovementPage() {
     };
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    if (!loading && initialEventId && events.length > 0) {
+      const exists = events.some((e) => e._id === initialEventId);
+      if (exists) {
+        setSelectedId(initialEventId);
+      }
+    }
+  }, [loading, initialEventId, events]);
 
   const handleJoin = async (id, { name, phone, email } = {}) => {
     if (joinedIds.has(id)) return;
@@ -131,7 +154,7 @@ export default function MovementPage() {
                       key={event._id}
                       event={event}
                       onOpenJoinModal={setJoinModalEventId}
-                      onOpen={setSelectedId}
+                      onOpen={openDrawer}
                       joined={joinedIds.has(event._id)}
                       index={i}
                     />
@@ -151,7 +174,7 @@ export default function MovementPage() {
       <EventDetailDrawer
         event={selectedEvent}
         open={Boolean(selectedId)}
-        onOpenChange={(o) => !o && setSelectedId(null)}
+        onOpenChange={(o) => !o && closeDrawer()}
         onOpenJoinModal={setJoinModalEventId}
         joined={selectedId ? joinedIds.has(selectedId) : false}
       />
@@ -165,5 +188,17 @@ export default function MovementPage() {
         onJoin={handleJoin}
       />
     </div>
+  );
+}
+
+export default function MovementPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-[#F7F7F2]">
+        <span className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF5C00] border-t-transparent" />
+      </div>
+    }>
+      <MovementContent />
+    </Suspense>
   );
 }
