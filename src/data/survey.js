@@ -1,17 +1,15 @@
 // Static content + full survey definition for AKTIVPAL
 
 export const IMAGES = {
-  hero: "https://images.unsplash.com/photo-1786263503168-28dc7767d7a3?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600",
-  hike: "https://images.unsplash.com/photo-1725078849783-81d0baab71e4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-  run: "https://images.unsplash.com/photo-1785418169168-23de800ab1bd?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-  climb:
-    "https://images.unsplash.com/photo-1727558729775-83c4ab8d55a8?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-  bike: "https://images.unsplash.com/photo-1627044185459-09e6dbc39444?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+  hero: "/images/home/photo-1786263503168-28dc7767d7a3.jpeg",
+  hike: "/images/home/photo-1725078849783-81d0baab71e4.jpeg",
+  run: "/images/home/photo-1785418169168-23de800ab1bd.jpeg",
+  climb: "/images/home/photo-1727558729775-83c4ab8d55a8.jpeg",
+  bike: "/images/home/photo-1627044185459-09e6dbc39444.jpeg",
   ski: "https://images.pexels.com/photos/15602865/pexels-photo-15602865.jpeg?auto=compress&cs=tinysrgb&w=1200",
   canada:
     "https://images.pexels.com/photos/8561213/pexels-photo-8561213.jpeg?auto=compress&cs=tinysrgb&w=1400",
-  activitiesBg:
-    "https://images.unsplash.com/photo-1566353820666-883ec100f41b?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600",
+  activitiesBg: "/images/home/photo-1566353820666-883ec100f41b.jpeg",
 };
 
 export const MATCH_CRITERIA = [

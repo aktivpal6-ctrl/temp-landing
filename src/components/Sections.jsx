@@ -665,7 +665,7 @@ export const Safety = () => {
           <p className="mt-14 text-lg md:text-xl text-[#F7F7F2]/80 max-w-3xl leading-relaxed border-l-4 border-[#FF5C00] pl-6">
             Unlike dating apps, the goal is simple:{" "}
             <strong className="font-display font-extrabold text-[#F7F7F2]">
-              Find the people who want move with you.
+              Find the people who want to move with you.
             </strong>
           </p>
         </Reveal>
