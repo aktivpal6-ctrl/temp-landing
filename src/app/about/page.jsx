@@ -33,6 +33,57 @@ export const metadata = {
   },
 };
 
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "About — AKTIVPAL",
+  description:
+    "Learn about AKTIVPAL — why we exist, the problem we're solving, and our mission to help you find the right people to move with.",
+  url: "https://www.aktivpal.com/about",
+  inLanguage: "en-CA",
+  isPartOf: {
+    "@type": "Organization",
+    name: "AKTIVPAL",
+    url: "https://www.aktivpal.com",
+  },
+  about: {
+    "@type": "Organization",
+    name: "AKTIVPAL",
+    url: "https://www.aktivpal.com",
+  },
+};
+
+const breadcrumbsSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.aktivpal.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "About",
+      item: "https://www.aktivpal.com/about",
+    },
+  ],
+};
+
 export default function Page() {
-  return <AboutPage />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
+      <AboutPage />
+    </>
+  );
 }

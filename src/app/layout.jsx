@@ -78,8 +78,15 @@ const organizationSchema = {
     "@type": "Country",
     name: "Canada",
   },
-  // TODO: Add real social media URLs once profiles are created
-  sameAs: [],
+  // TODO: Add more social media URLs once profiles are created.
+  // Expected platforms: YouTube, Facebook, LinkedIn, TikTok
+  sameAs: ["https://www.instagram.com/aktivpals/"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "hello@aktivpal.com",
+    availableLanguage: "English",
+  },
 };
 
 const websiteSchema = {
@@ -99,6 +106,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
       <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"

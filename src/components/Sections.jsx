@@ -826,6 +826,19 @@ export const FinalCTA = () => {
   );
 };
 
+// TODO: When a Testimonials/Reviews section is added, implement Review or
+// AggregateRating JSON-LD schema colocated with the component. Use "Review"
+// per testimonial (author, reviewBody, reviewRating) if individual reviews exist,
+// or "AggregateRating" if only a summary rating is available. Do not fabricate
+// rating values — only emit schema backed by real data.
+
+// TODO: When an Events/Calendar section is added, implement Event JSON-LD
+// schema colocated with the component. Emit one <script type="application/ld+json">
+// per event (or a single @graph array). Pull every field from the actual event
+// data: name, startDate, endDate, location (Place with address), description,
+// offers (price + currency if ticketed), eventStatus (EventScheduled/EventCancelled
+// mapped from the app's status field), and image.
+
 /* ---------------- CLOSING + FOOTER ---------------- */
 export const ClosingFooter = ({ converted }) => (
   <footer
