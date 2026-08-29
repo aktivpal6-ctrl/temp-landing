@@ -10,6 +10,7 @@ import { scrollToWaitlist } from "@/components/primitives";
 
 const NAV_LINKS = [
   { label: "Our Story", href: "/about" },
+  { label: "Movement", href: "/movement" },
 ];
 
 export const Nav = () => {
