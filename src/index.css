@@ -41,6 +41,49 @@
 
 html {
   scroll-behavior: auto;
+  scroll-padding-top: 6rem;
+}
+
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 3px solid #a63c00;
+  outline-offset: 4px;
+}
+
+.site-navigation {
+  --nav-background: #0F291E;
+  --nav-foreground: #F7F7F2;
+  --nav-accent: #FF8A4C;
+  --nav-border: rgb(247 247 242 / 15%);
+  background-color: var(--nav-background);
+  color: var(--nav-foreground);
+  border-color: var(--nav-border);
+}
+
+.site-navigation[data-theme="light"] {
+  --nav-background: #F7F7F2;
+  --nav-foreground: #0F291E;
+  --nav-accent: #A63C00;
+  --nav-border: rgb(15 41 30 / 15%);
+}
+
+.site-navigation-link {
+  color: var(--nav-foreground);
+}
+
+.site-navigation-link:hover,
+.site-navigation-link[aria-current="page"],
+.site-navigation-accent {
+  color: var(--nav-accent);
+}
+
+.site-navigation-link[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 8px;
+}
+
+.site-navigation :where(a, button):focus-visible {
+  outline: 3px solid var(--nav-foreground);
+  outline-offset: 4px;
 }
 
 body {

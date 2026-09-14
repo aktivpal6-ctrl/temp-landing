@@ -2,6 +2,7 @@ import "@/index.css";
 import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "./providers";
+import { SITE_URL } from "@/lib/seo";
 
 const GA_ID = "G-CEH9SBXJSJ";
 
@@ -21,37 +22,13 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: "AKTIVPAL — Movement is better together.",
-  description:
-    "AKTIVPAL — Movement is better together. The easiest way to find the right people to hike, run, ride, climb, ski and explore with in Canada.",
-  metadataBase: new URL("https://www.aktivpal.com"),
-  openGraph: {
-    title: "AKTIVPAL — Movement is better together.",
-    description:
-      "AKTIVPAL helps you find the right people to hike, run, ride, climb, ski and explore with in Canada. Join the movement.",
-    url: "https://www.aktivpal.com",
-    siteName: "AKTIVPAL",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "AKTIVPAL — Movement is better together.",
-      },
-    ],
-    locale: "en_CA",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "AKTIVPAL — Movement is better together.",
-    description:
-      "AKTIVPAL helps you find the right people to hike, run, ride, climb, ski and explore with in Canada. Join the movement.",
-    images: ["/og-image.png"],
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-icon.png",
+  metadataBase: new URL(SITE_URL),
+  title: "AKTIVPAL | Outdoor Community in Canada",
+  description: "Find activity partners in Canada with AKTIVPAL, starting in British Columbia.",
+  icons: { icon: "/favicon.ico" },
+  robots: {
+    index: true, follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
 };
 
@@ -67,13 +44,10 @@ const organizationSchema = {
   url: "https://www.aktivpal.com",
   logo: {
     "@type": "ImageObject",
-    url: "https://www.aktivpal.com/images/aktivpal.png",
-    width: 512,
-    height: 512,
+    url: `${SITE_URL}/logo.svg`,
   },
   description:
     "AKTIVPAL helps you find people to hike, run, ski, climb, cycle, and explore with in Canada. Starting in British Columbia.",
-  foundingDate: "2024",
   areaServed: {
     "@type": "Country",
     name: "Canada",
@@ -92,6 +66,7 @@ const organizationSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
   name: "AKTIVPAL",
   url: "https://www.aktivpal.com",
   inLanguage: "en-CA",
@@ -104,8 +79,9 @@ const websiteSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
+    <html lang="en-CA" className={`${outfit.variable} ${plusJakarta.variable}`}>
       <head>
+        {process.env.AKTIVPAL_TEST_MODE !== "1" && <>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <Script
@@ -120,6 +96,7 @@ export default function RootLayout({ children }) {
             gtag('config', '${GA_ID}');
           `}
         </Script>
+        </>}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

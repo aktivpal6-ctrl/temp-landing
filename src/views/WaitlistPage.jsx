@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, ShieldCheck } from "lucide-r
 import { Survey } from "@/components/Survey";
 import { Logo } from "@/components/primitives";
 import { IMAGES } from "@/data/survey";
+import { Footer } from "@/components/Footer";
 
 const WAITLIST_PAGE_HIGHLIGHTS = [
   {
@@ -20,8 +21,8 @@ const WAITLIST_PAGE_HIGHLIGHTS = [
   },
   {
     icon: ShieldCheck,
-    title: "Starting in Canada",
-    body: "We're launching with a focus on Canadian outdoor communities. Your signup helps us build for you.",
+    title: "Starting in British Columbia",
+    body: "We're building for Canadian outdoor communities, starting in British Columbia. Your signup helps us build for you.",
   },
 ];
 
@@ -110,6 +111,7 @@ export const WaitlistPage = () => {
           <Survey standalone />
         </section>
       </main>
+      <footer><Footer variant="light" /></footer>
     </div>
   );
 };

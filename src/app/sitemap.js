@@ -1,19 +1,11 @@
-/** @type {import('next').MetadataRoute.Sitemap} */
+import { PUBLIC_PAGES, canonicalUrl } from "@/lib/seo";
+
+/** @returns {import('next').MetadataRoute.Sitemap} */
 export default function sitemap() {
-  const base = "https://www.aktivpal.com";
-
-  /** @type {Array<{path: string, changeFrequency: 'always'|'hourly'|'daily'|'weekly'|'monthly'|'yearly'|'never', priority: number}>} */
-  const routes = [
-    { path: "", changeFrequency: "weekly", priority: 1.0 },
-    { path: "/about", changeFrequency: "monthly", priority: 0.7 },
-    { path: "/waitlist", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/movement", changeFrequency: "weekly", priority: 0.9 },
-  ];
-
-  return routes.map(({ path, changeFrequency, priority }) => ({
-    url: `${base}${path}`,
-    lastModified: new Date(),
-    changeFrequency,
-    priority,
+  // No fabricated lastModified: add dates only when backed by content revisions.
+  return Object.keys(PUBLIC_PAGES).map((path) => ({
+    url: canonicalUrl(path),
+    changeFrequency: path === "/about" ? "monthly" : "weekly",
+    priority: path === "/" ? 1 : 0.7,
   }));
 }

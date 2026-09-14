@@ -1,13 +1,14 @@
-/** @type {import('next').MetadataRoute.Robots} */
+import { SITE_URL } from "@/lib/seo";
+
+/** @returns {import('next').MetadataRoute.Robots} */
 export default function robots() {
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin", "/login", "/api/"],
-      },
-    ],
-    sitemap: "https://www.aktivpal.com/sitemap.xml",
+    rules: [{
+      userAgent: "*",
+      allow: "/",
+      // Login/admin must remain crawlable so their noindex can be read.
+      disallow: ["/api/"],
+    }],
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

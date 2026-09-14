@@ -1,89 +1,9 @@
 import { AboutPage } from "@/views/AboutPage";
+import { JsonLd } from "@/components/JsonLd";
+import { pageMetadata, pageSchema } from "@/lib/seo";
 
-export const metadata = {
-  title: "About — AKTIVPAL",
-  description:
-    "Learn about AKTIVPAL — why we exist, the problem we're solving, and our mission to help you find the right people to move with.",
-  openGraph: {
-    title: "About — AKTIVPAL",
-    description:
-      "Learn about AKTIVPAL — why we exist, the problem we're solving, and our mission to help you find the right people to move with.",
-    url: "https://www.aktivpal.com/about",
-    siteName: "AKTIVPAL",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "About AKTIVPAL",
-      },
-    ],
-    locale: "en_CA",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About — AKTIVPAL",
-    description:
-      "Learn about AKTIVPAL — why we exist, the problem we're solving, and our mission to help you find the right people to move with.",
-    images: ["/og-image.png"],
-  },
-  alternates: {
-    canonical: "https://www.aktivpal.com/about",
-  },
-};
-
-const webPageSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "About — AKTIVPAL",
-  description:
-    "Learn about AKTIVPAL — why we exist, the problem we're solving, and our mission to help you find the right people to move with.",
-  url: "https://www.aktivpal.com/about",
-  inLanguage: "en-CA",
-  isPartOf: {
-    "@type": "Organization",
-    name: "AKTIVPAL",
-    url: "https://www.aktivpal.com",
-  },
-  about: {
-    "@type": "Organization",
-    name: "AKTIVPAL",
-    url: "https://www.aktivpal.com",
-  },
-};
-
-const breadcrumbsSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: "https://www.aktivpal.com",
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "About",
-      item: "https://www.aktivpal.com/about",
-    },
-  ],
-};
+export const metadata = pageMetadata("/about");
 
 export default function Page() {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
-      />
-      <AboutPage />
-    </>
-  );
+  return <><JsonLd data={pageSchema("/about", "AboutPage")} /><AboutPage /></>;
 }

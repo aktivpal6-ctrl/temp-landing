@@ -18,6 +18,7 @@ import {
   ClosingFooter,
 } from "@/components/Sections";
 import { Nav } from "@/components/Nav";
+import { CanadaIntro } from "@/components/CanadaIntro";
 import { PageAtmosphere } from "@/components/atmosphere";
 import { TrailRail } from "@/components/TrailRail";
 import { Logo, scrollToWaitlist } from "@/components/primitives";
@@ -101,13 +102,16 @@ export const LandingPage = () => {
       <TrailRail />
       <Nav />
 
+      <main id="main-content">
       <Hero />
+      <CanadaIntro />
 
       <HowItWorks />
       <ProductMoment />
       <Community />
       <Safety />
       <FAQ />
+      </main>
       {/* <FinalCTA /> */}
       <ClosingFooter converted={false} />
 

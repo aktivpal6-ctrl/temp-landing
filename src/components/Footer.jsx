@@ -4,6 +4,7 @@ import { Logo } from "@/components/primitives";
 const FOOTER_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Movement", href: "/movement" },
   { label: "Waitlist", href: "/waitlist" },
 ];
 
@@ -21,7 +22,7 @@ export const Footer = ({ variant = "dark" }) => {
             </span>
           )}
         </div>
-        <nav className="flex items-center gap-6 text-sm text-[#F7F7F2]/60">
+        <nav aria-label="Footer navigation" className="flex flex-wrap justify-center items-center gap-6 text-sm text-[#F7F7F2]/60">
           {FOOTER_LINKS.map(({ label, href }) => (
             <Link
               key={label}
