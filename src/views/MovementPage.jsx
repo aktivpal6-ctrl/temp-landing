@@ -28,10 +28,10 @@ const CardSkeleton = () => (
   </div>
 );
 
-export default function MovementPage() {
+export default function MovementPage({ initialEvents = [] }) {
   const router = useRouter();
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState(initialEvents);
+  const [loading, setLoading] = useState(initialEvents.length === 0);
   const [loadError, setLoadError] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [joinedIds, setJoinedIds] = useState(() => new Set());
@@ -70,6 +70,10 @@ export default function MovementPage() {
   }, []);
 
   useEffect(() => {
+    if (initialEvents.length > 0) {
+      setLoading(false);
+      return;
+    }
     const fetchEvents = async () => {
       try {
         const res = await fetch("/api/events");
@@ -84,7 +88,7 @@ export default function MovementPage() {
       }
     };
     fetchEvents();
-  }, []);
+  }, [initialEvents.length]);
 
   useEffect(() => {
     if (!loading && initialEventId && events.length > 0) {
@@ -153,7 +157,13 @@ export default function MovementPage() {
               </h2>
             </div>
 
-            <p className="mb-8 max-w-2xl leading-relaxed text-[#4A524A]">\n              AKTIVPAL is starting in British Columbia. Browse listed activities below,\n              <Link href="/waitlist" className="underline underline-offset-4"> join early access in Canada</Link>\n              {" or "}<Link href="/about" className="underline underline-offset-4">read our story</Link>.\n            </p>\n            <div data-testid="events-grid" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <p className="mb-8 max-w-2xl leading-relaxed text-[#4A524A]">
+              AKTIVPAL is starting in British Columbia. Browse listed activities below,{" "}
+              <Link href="/waitlist" className="underline underline-offset-4">join early access in Canada</Link>
+              {" or "}
+              <Link href="/about" className="underline underline-offset-4">read our story</Link>.
+            </p>
+            <div data-testid="events-grid" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {loading
                 ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
                 : events.map((event, i) => (
@@ -170,14 +180,21 @@ export default function MovementPage() {
 
             {loadError && (
               <p role="status" className="py-16 text-center text-[#4A524A]">
-                Activities could not be loaded. Please refresh the page to try again.
+                Event details are loading. Please refresh the page to see the latest activities.
               </p>
             )}
             {!loading && !loadError && events.length === 0 && (
               <p data-testid="events-empty" className="py-16 text-center text-base font-medium text-[#4A524A]">
-                No events yet — check back soon.
+                New activities in British Columbia are added regularly. Check back soon or join the waitlist to be notified when new events are announced.
               </p>
             )}
+
+            <noscript>
+              <p className="py-16 text-center text-[#4A524A]">
+                AKTIVPAL organises outdoor activities including walks, hikes and runs in British Columbia, Canada.
+                Enable JavaScript to view upcoming events and join activities.
+              </p>
+            </noscript>
           </div>
         </section>
       </main>
