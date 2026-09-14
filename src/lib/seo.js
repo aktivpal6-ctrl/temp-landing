@@ -32,9 +32,9 @@ export function pageMetadata(path) {
     alternates: { canonical: url },
     openGraph: {
       title, description, url, siteName: "AKTIVPAL", locale: "en_CA", type: "website",
-      images: [{ url: "/og-image.png", width: 1024, height: 683, alt: "AKTIVPAL — Movement is better together in Canada" }],
+      images: [{ url: `${SITE_URL}/og-image.png`, width: 1024, height: 683, alt: "AKTIVPAL — Find activity partners in Canada" }],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/og-image.png"] },
+    twitter: { card: "summary_large_image", title, description, images: [`${SITE_URL}/og-image.png`] },
   };
 }
 
