@@ -60,7 +60,7 @@ try {
       assert.ok(!html.includes("googletagmanager.com"), "Analytics disabled for tests");
       titles.add(html.match(/<title>(.*?)<\/title>/)[1]);
       const data = schemas(html);
-      assert.ok(data.some((item) => item["@type"] === "Organization" && item.areaServed.name === "Canada"));
+      assert.ok(data.some((item) => item["@type"] === "Organization" && item.areaServed.name === "British Columbia, Canada"));
       assert.ok(data.some((item) => item["@id"] === canonical + "#webpage" && item.isPartOf["@id"].endsWith("/#website")));
       assert.ok(data.some((item) => item["@type"] === "BreadcrumbList"));
     }
@@ -74,7 +74,9 @@ try {
     const xml = await (await fetch(base + "/sitemap.xml")).text();
     const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
     assert.deepEqual(locations.sort(), routes.map((path) => "https://www.aktivpal.com" + (path === "/" ? "" : path)).sort());
-    assert.ok(!xml.includes("lastmod"));
+    const lastModified = [...xml.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map((m) => m[1]);
+    assert.equal(lastModified.length, routes.length);
+    assert.ok(lastModified.every((value) => !Number.isNaN(Date.parse(value))));
     const robots = await (await fetch(base + "/robots.txt")).text();
     assert.ok(robots.includes("Allow: /"));
     assert.ok(robots.includes("Disallow: /api/"));
@@ -105,7 +107,7 @@ try {
     const ctx = await context({ javaScriptEnabled: false });
     const page = await ctx.newPage();
     await page.goto(base);
-    assert.ok(await page.getByRole("heading", { name: "Find activity partners in Canada." }).isVisible());
+    assert.ok(await page.getByRole("heading", { name: "Find your people. Then get moving." }).isVisible());
     const html = await (await fetch(base)).text();
     const faq = schemas(html).find((item) => item["@type"] === "FAQPage");
     for (const question of faq.mainEntity) {

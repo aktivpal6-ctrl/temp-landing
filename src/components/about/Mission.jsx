@@ -1,5 +1,6 @@
 import { Kicker, MaskedLines, Reveal } from "@/components/about/motion";
 import { Numeral } from "@/components/about/Numeral";
+import Image from "next/image";
 
 const FOREST_IMG = "/images/about/photo-1470071459604-3b5ec3a7fe05.jpeg";
 
@@ -8,11 +9,13 @@ export const Mission = () => (
     data-testid="chapter-04"
     className="relative overflow-hidden bg-[#0F291E] py-28 md:py-40"
   >
-    <img
+    <Image
       src={FOREST_IMG}
       alt=""
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
+      fill
+      sizes="100vw"
+      className="object-cover opacity-[0.12]"
     />
     <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E] via-[#0F291E]/80 to-[#0F291E]" />
     <Numeral dark value="04" className="-top-6 left-0 opacity-70 md:left-6" />

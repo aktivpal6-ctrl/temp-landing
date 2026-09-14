@@ -2,9 +2,8 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
-// TODO: Cannot use next/image here because framer-motion requires a DOM <img> element for scroll-driven parallax transforms.
-// Consider refactoring to use CSS transforms on a wrapper div with next/image inside, if performance is a concern.
 export const ParallaxImage = ({ src, alt, className = "" }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -12,12 +11,18 @@ export const ParallaxImage = ({ src, alt, className = "" }) => {
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      <motion.img
-        src={src}
-        alt={alt}
+      <motion.div
         style={{ y }}
-        className="absolute inset-0 h-[120%] w-full object-cover will-change-transform"
-      />
+        className="absolute inset-x-0 -top-[10%] h-[120%] will-change-transform"
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover"
+        />
+      </motion.div>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import { PUBLIC_PAGES, canonicalUrl } from "@/lib/seo";
 
 const LAST_MODIFIED = {
-  "/": "2026-09-10",
-  "/about": "2026-09-10",
-  "/movement": "2026-09-10",
-  "/waitlist": "2026-09-10",
+  "/": "2026-09-15",
+  "/about": "2026-09-15",
+  "/movement": "2026-09-15",
+  "/waitlist": "2026-09-15",
 };
 
 /** @returns {import('next').MetadataRoute.Sitemap} */

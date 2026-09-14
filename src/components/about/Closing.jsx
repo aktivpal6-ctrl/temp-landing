@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { MaskedLines, Reveal } from "@/components/about/motion";
 
@@ -9,11 +10,13 @@ export const Closing = () => (
     data-testid="closing-cta"
     className="relative overflow-hidden bg-[#0F291E] py-28 md:py-40"
   >
-    <img
+    <Image
       src={LAKE_IMG}
       alt=""
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full object-cover opacity-[0.15]"
+      fill
+      sizes="100vw"
+      className="object-cover opacity-[0.15]"
     />
     <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E] via-[#0F291E]/70 to-[#0F291E]" />
     <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-6 text-center">

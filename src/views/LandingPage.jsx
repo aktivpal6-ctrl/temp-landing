@@ -13,6 +13,7 @@ import {
   Community,
   ActivitiesGrid,
   Safety,
+  TerritorialAcknowledgement,
   FAQ,
   FinalCTA,
   ClosingFooter,
@@ -110,6 +111,7 @@ export const LandingPage = () => {
       <ProductMoment />
       <Community />
       <Safety />
+      <TerritorialAcknowledgement />
       <FAQ />
       </main>
       {/* <FinalCTA /> */}

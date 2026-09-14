@@ -3,10 +3,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Lenis from "lenis";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Compass } from "lucide-react";
+import { ArrowRight, CalendarDays, Compass, MapPin } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/about/Footer";
 import { Kicker, MaskedLines } from "@/components/about/motion";
@@ -121,14 +122,21 @@ export default function MovementPage({ initialEvents = [] }) {
       <Nav />
       <main>
         <section data-testid="movement-hero" className="relative flex min-h-[70vh] items-end overflow-hidden bg-[#0F291E]">
-          <motion.img
-            src={HERO_IMG}
-            alt="A group of hikers crossing an open mountain meadow"
+          <motion.div
             initial={{ scale: 1.15 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+            className="absolute inset-0"
+          >
+            <Image
+              src={HERO_IMG}
+              alt="A group of hikers crossing an open mountain meadow"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E]/70 via-[#0F291E]/55 to-[#0F291E]" />
           <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-40">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
@@ -143,7 +151,7 @@ export default function MovementPage({ initialEvents = [] }) {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="mt-6 max-w-2xl text-lg leading-relaxed text-[#F7F7F2]/65"
             >
-              Explore walks, hikes and runs in British Columbia, Canada. Check each activity for its location, pace and meeting details before joining.
+              Explore walks, hikes, trail runs and other outdoor activities in British Columbia. Check each activity for its location, pace and meeting details before joining.
             </motion.p>
           </div>
         </section>
@@ -159,7 +167,7 @@ export default function MovementPage({ initialEvents = [] }) {
 
             <p className="mb-8 max-w-2xl leading-relaxed text-[#4A524A]">
               AKTIVPAL is starting in British Columbia. Browse listed activities below,{" "}
-              <Link href="/waitlist" className="underline underline-offset-4">join early access in Canada</Link>
+              <Link href="/waitlist" className="underline underline-offset-4">join early access in British Columbia</Link>
               {" or "}
               <Link href="/about" className="underline underline-offset-4">read our story</Link>.
             </p>
@@ -179,19 +187,29 @@ export default function MovementPage({ initialEvents = [] }) {
             </div>
 
             {loadError && (
-              <p role="status" className="py-16 text-center text-[#4A524A]">
-                Event details are loading. Please refresh the page to see the latest activities.
-              </p>
+              <div role="status" className="my-10 rounded-[2rem] border border-[#FF5C00]/25 bg-white p-8 text-center shadow-[0_20px_55px_rgba(15,41,30,0.08)]">
+                <p className="font-display text-xl font-bold text-[#0F291E]">Activities could not be loaded</p>
+                <p className="mt-2 text-[#4A524A]">Please refresh the page to see the latest activities.</p>
+              </div>
             )}
             {!loading && !loadError && events.length === 0 && (
-              <p data-testid="events-empty" className="py-16 text-center text-base font-medium text-[#4A524A]">
-                New activities in British Columbia are added regularly. Check back soon or join the waitlist to be notified when new events are announced.
-              </p>
+              <motion.div data-testid="events-empty" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="relative my-10 overflow-hidden rounded-[2rem] border border-[#0F291E]/10 bg-[#0F291E] px-7 py-12 text-[#F7F7F2] shadow-[0_24px_70px_rgba(15,41,30,0.18)] md:px-12 md:py-16">
+                <div aria-hidden="true" className="absolute -right-8 -top-20 font-display text-[15rem] font-black leading-none text-white/[0.035]">GO</div>
+                <div className="relative z-10 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
+                  <div>
+                    <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#FF8A4C]"><CalendarDays size={15} /> The next plan is taking shape</span>
+                    <h3 className="mt-5 max-w-xl font-display text-3xl font-black tracking-tight md:text-5xl">No activities listed yet.<br /><span className="text-[#FF5C00]">Your next one is coming.</span></h3>
+                    <p className="mt-5 max-w-xl leading-relaxed text-[#F7F7F2]/70">New activities in British Columbia are added regularly. Join early access and we’ll let you know when the next walk, hike or trail run is ready.</p>
+                  </div>
+                  <Link href="/waitlist" className="group inline-flex w-fit items-center gap-3 rounded-full bg-[#FF5C00] px-6 py-4 font-display text-sm font-bold text-white transition-all hover:-translate-y-1 hover:bg-[#e64f00] hover:shadow-[0_12px_30px_rgba(255,92,0,0.28)]">Join early access <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" /></Link>
+                </div>
+                <div className="relative z-10 mt-10 flex flex-wrap gap-3 border-t border-white/10 pt-6 text-sm text-[#F7F7F2]/60"><span className="inline-flex items-center gap-2"><MapPin size={15} className="text-[#FF5C00]" /> British Columbia</span><span aria-hidden="true">•</span><span>Real plans, shared movement</span></div>
+              </motion.div>
             )}
 
             <noscript>
               <p className="py-16 text-center text-[#4A524A]">
-                AKTIVPAL organises outdoor activities including walks, hikes and runs in British Columbia, Canada.
+                AKTIVPAL organises outdoor activities including walks, hikes and trail runs in British Columbia, Canada.
                 Enable JavaScript to view upcoming events and join activities.
               </p>
             </noscript>

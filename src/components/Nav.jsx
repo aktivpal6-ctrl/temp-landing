@@ -32,6 +32,22 @@ export const Nav = () => {
     setMobileOpen(false);
   };
 
+  const keepFocusInMenu = (event) => {
+    if (event.key !== "Tab") return;
+    const focusable = [...event.currentTarget.querySelectorAll("button, a[href]")]
+      .filter((element) => !element.hasAttribute("disabled"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   useEffect(closeMenu, [pathname]);
 
   useEffect(() => {
@@ -93,6 +109,7 @@ export const Nav = () => {
 
       <dialog ref={dialogRef} id="mobile-navigation" aria-label="Main navigation"
         onClose={() => setMobileOpen(false)}
+        onKeyDown={keepFocusInMenu}
         onClick={(event) => { if (event.target === event.currentTarget) closeMenu(); }}
         data-lenis-prevent
         data-theme="dark"

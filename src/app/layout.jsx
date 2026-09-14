@@ -23,8 +23,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "AKTIVPAL | Outdoor Community in Canada",
-  description: "Find activity partners in Canada with AKTIVPAL, starting in British Columbia.",
+  title: "AKTIVPAL | Outdoor Activities in British Columbia",
+  description: "Find people for outdoor activities with AKTIVPAL, starting in British Columbia.",
   icons: { icon: "/favicon.ico" },
   robots: {
     index: true, follow: true,
@@ -41,16 +41,16 @@ const organizationSchema = {
   "@type": "Organization",
   "@id": "https://www.aktivpal.com/#organization",
   name: "AKTIVPAL",
-  url: "https://www.aktivpal.com",
+  url: `${SITE_URL}/`,
   logo: {
     "@type": "ImageObject",
     url: `${SITE_URL}/logo.svg`,
   },
   description:
-    "AKTIVPAL helps you find people to hike, run, ski, climb, cycle, and explore with in Canada. Starting in British Columbia.",
+    "AKTIVPAL helps people find others to hike, trek, trail run, walk, camp, ski, kayak, swim and explore with, starting in British Columbia.",
   areaServed: {
-    "@type": "Country",
-    name: "Canada",
+    "@type": "AdministrativeArea",
+    name: "British Columbia, Canada",
   },
   // TODO: Add more social media URLs once profiles are created.
   // Expected platforms: YouTube, Facebook, LinkedIn, TikTok
@@ -68,7 +68,8 @@ const websiteSchema = {
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
   name: "AKTIVPAL",
-  url: "https://www.aktivpal.com",
+  alternateName: "AktivPal",
+  url: `${SITE_URL}/`,
   inLanguage: "en-CA",
   publisher: {
     "@type": "Organization",

@@ -389,8 +389,7 @@ export const ProductMoment = () => {
       cls: "text-[#F7F7F2]/75",
       node: (
         <>
-          "We should go hiking sometime." "Let's run together." And then…
-          nothing happens.
+          But “sometime” rarely makes it onto the calendar.
         </>
       ),
     },
@@ -400,10 +399,7 @@ export const ProductMoment = () => {
       cls: "text-[#F7F7F2] font-medium",
       node: (
         <>
-          AKTIVPAL turns "sometime" into "this weekend."{" "}
-          <span className="text-[#FF5C00] font-semibold">
-            Find the people. Make the plan. Go.
-          </span>
+          <em>AKTIVPAL helps you find people who want to do the same things you do — so you can make a plan and actually go.</em>
         </>
       ),
     },
@@ -422,7 +418,7 @@ export const ProductMoment = () => {
               We've all said it
             </span>
             <h2 className="mt-4 font-display font-black text-[#1A1D1A] text-4xl md:text-5xl tracking-tighter leading-[1.02]">
-              From "we should" to "let's go."
+              “We should do that sometime.”
             </h2>
           </Reveal>
           <div className="mt-8 space-y-5 text-lg leading-relaxed">
@@ -675,31 +671,55 @@ export const Safety = () => {
   );
 };
 
-/* Native details keeps every answer crawlable and usable without JavaScript. */
-export const FAQ = () => (
-  <section className="relative bg-[#F7F7F2] py-14 md:py-20" data-testid="faq" id="faq">
-    <div className="max-w-3xl mx-auto px-6 relative z-10">
-      <h2 className="font-display font-bold text-2xl md:text-3xl text-[#0F291E]">
-        Questions before you get moving.
-      </h2>
-      <div className="mt-6 divide-y divide-[#0F291E]/15">
-        {FAQS.map((faq, i) => (
-          <details key={faq.question} className="group py-4" data-testid={`faq-card-${i}`}>
-            <summary className="cursor-pointer rounded font-display font-semibold text-base md:text-lg text-[#0F291E]" data-testid={`faq-toggle-${i}`}>
-              {faq.question}
-            </summary>
-            <p className="mt-3 text-sm md:text-base text-[#4A524A] leading-relaxed">{faq.answer}</p>
-          </details>
-        ))}
-      </div>
-      <p className="mt-6 text-sm text-[#4A524A]">
-        <Link href="/movement" className="underline underline-offset-4">Explore upcoming activities</Link>
-        {" or "}
-        <Link href="/waitlist" className="underline underline-offset-4">join early access in Canada</Link>.
+export const TerritorialAcknowledgement = () => (
+  <section className="relative overflow-hidden bg-[#0F291E] px-6 py-16 text-[#F7F7F2] grain md:py-20" data-testid="territorial-acknowledgement" aria-labelledby="territorial-acknowledgement-title">
+    <div aria-hidden="true" className="absolute -right-8 -top-20 font-display text-[14rem] font-black leading-none text-white/[0.035] md:text-[18rem]">BC</div>
+    <div className="relative z-10 mx-auto max-w-4xl border-l-2 border-[#FF5C00] pl-6 md:pl-9">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#FF8A4C]">With gratitude and respect</p>
+      <h2 id="territorial-acknowledgement-title" className="mt-3 font-display text-2xl font-black tracking-tight md:text-3xl">Territorial Acknowledgement</h2>
+      <p className="mt-5 text-sm leading-relaxed text-[#F7F7F2]/75 md:text-base">
+        AKTIVPAL is based in Vancouver, British Columbia, on the unceded traditional territories of the{" "}
+        <strong className="font-semibold text-[#F7F7F2]">xʷməθkʷəy̓əm (Musqueam), Sḵwx̱wú7mesh (Squamish), and səlilwətaɬ (Tsleil-Waututh) Nations</strong>.
+      </p>
+      <p className="mt-4 text-sm leading-relaxed text-[#F7F7F2]/75 md:text-base">
+        We acknowledge the enduring relationship these Nations have with these lands and waters, and we are grateful for the opportunity to live, work, move, and connect with others here.
       </p>
     </div>
   </section>
 );
+
+/* Native details keeps every answer crawlable and usable without JavaScript. */
+export const FAQ = () => {
+  return (
+  <section className="relative overflow-hidden bg-[#F7F7F2] py-12 md:py-16" data-testid="faq" id="faq">
+    <div className="relative z-10 mx-auto grid max-w-5xl gap-7 px-6 lg:grid-cols-[0.65fr_1.35fr]">
+      <div className="ap-reveal ap-in-view">
+        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#A63C00]">Good to know</span>
+        <h2 className="mt-3 font-display text-2xl font-black leading-tight tracking-tight text-[#0F291E] md:text-3xl">A few quick questions.</h2>
+        <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#4A524A]">The essentials before you get moving.</p>
+      </div>
+      <div className="ap-reveal ap-in-view [animation-delay:100ms]">
+      <div className="space-y-3">
+        {FAQS.map((faq, i) => (
+          <details key={faq.question} className="group overflow-hidden rounded-xl border border-[#0F291E]/10 bg-white transition-colors duration-300 open:border-[#FF5C00]/30" data-testid={`faq-card-${i}`}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl px-4 py-3.5 font-display text-sm font-bold text-[#0F291E] marker:content-none md:px-5" data-testid={`faq-toggle-${i}`}>
+              <span>{faq.question}</span>
+              <span aria-hidden="true" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0F291E] text-base font-normal text-[#F7F7F2] transition-all duration-300 group-open:rotate-45 group-open:bg-[#FF5C00]">+</span>
+            </summary>
+            <p className="px-4 pb-4 pr-12 text-sm leading-relaxed text-[#4A524A] md:px-5 md:pr-16">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+      <p className="mt-5 flex flex-wrap items-center gap-3 text-xs font-semibold text-[#4A524A]">
+        <Link href="/movement" className="underline underline-offset-4 hover:text-[#A63C00]">Explore activities</Link>
+        <span aria-hidden="true">·</span>
+        <Link href="/waitlist" className="underline underline-offset-4 hover:text-[#A63C00]">Join early access</Link>
+      </p>
+      </div>
+    </div>
+  </section>
+  );
+};
 
 /* ---------------- FINAL CTA — "Your next adventure could start here" ---------------- */
 export const FinalCTA = () => {

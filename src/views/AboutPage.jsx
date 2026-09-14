@@ -9,7 +9,6 @@ import { ChapterOne } from "@/components/about/ChapterOne";
 import { ChapterTwo } from "@/components/about/ChapterTwo";
 import { ChapterThree } from "@/components/about/ChapterThree";
 import { Mission } from "@/components/about/Mission";
-import { CanadaBuilt } from "@/components/about/CanadaBuilt";
 import { Closing } from "@/components/about/Closing";
 import { Footer } from "@/components/about/Footer";
 
@@ -44,7 +43,6 @@ export const AboutPage = () => {
           { id: "chapter-02" },
           { id: "chapter-03" },
           { id: "chapter-04" },
-          { id: "canada-built-section" },
         ]}
       />
       <main>
@@ -53,7 +51,6 @@ export const AboutPage = () => {
         <ChapterTwo />
         <ChapterThree />
         <Mission />
-        <CanadaBuilt />
         <Closing />
       </main>
       <Footer />

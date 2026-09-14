@@ -2,15 +2,15 @@
 export const FAQS = [
   {
     question: "What is AKTIVPAL?",
-    answer: "AKTIVPAL is building a community to help people find activity partners in Canada. Whether you are new to a place or looking for people to hike, run, cycle, climb or ski with, the goal is to make real plans and get moving together.",
+    answer: "AKTIVPAL helps people find others for real-world outdoor activities. Whether you want to hike, trail run, walk, camp, ski, kayak, swim or explore, the goal is to meet people with shared interests, make a plan and get moving together.",
   },
   {
-    question: "Where is AKTIVPAL launching in Canada?",
+    question: "Where is AKTIVPAL available?",
     answer: "AKTIVPAL is starting in British Columbia, Canada. You can join the early access waitlist and check the Movement page for upcoming activities. Availability elsewhere in Canada will depend on the rollout.",
   },
   {
     question: "What activities is AKTIVPAL built for?",
-    answer: "AKTIVPAL is being built for hiking, running, walking, cycling, climbing, skiing and snowboarding. Check each listed activity for its location, pace and details before joining.",
+    answer: "AKTIVPAL is being built for trekking, trail running, walking, hiking, camping, skiing, kayaking and swimming. Check each listed activity for its location, pace and details before joining.",
   },
   {
     question: "How can I get involved?",

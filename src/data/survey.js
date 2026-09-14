@@ -16,7 +16,7 @@ export const MATCH_CRITERIA = [
   {
     icon: "Compass",
     title: "Activity",
-    body: "Hiking, running, skiing, climbing and more.",
+    body: "Hiking, trail running, walking, camping, skiing, kayaking, swimming and more.",
   },
   {
     icon: "Gauge",
@@ -37,36 +37,45 @@ export const MATCH_CRITERIA = [
 
 export const ACTIVITIES = [
   {
+    icon: "Mountain",
+    title: "Trekking",
+    body: "Find people for longer routes and mountain adventures across British Columbia.",
+  },
+  {
     icon: "Footprints",
     title: "Hiking",
     body: "Explore Vancouver's North Shore trails, the Grouse Grind, or Squamish with a partner who matches your pace.",
   },
   {
     icon: "Zap",
-    title: "Running",
-    body: "Find a running partner for Stanley Park, the Seawall, or your local trail.",
+    title: "Trail Running",
+    body: "Find a trail running partner for Vancouver's North Shore, Stanley Park, or your local trail.",
   },
   {
     icon: "Snowflake",
-    title: "Skiing & Snowboarding",
+    title: "Skiing",
     body: "Chase the season at Whistler, Cypress, or Grouse with people at your level.",
   },
   {
-    icon: "Bike",
-    title: "Cycling",
-    body: "Road, mountain, or casual — find riders around Vancouver and the Fraser Valley.",
+    icon: "Footprints",
+    title: "Walking",
+    body: "Meet people for a walk along the Seawall, through a local park, or around your neighbourhood.",
   },
   {
-    icon: "Mountain",
-    title: "Climbing",
-    body: "Find climbing partners for Squamish's Smoke Bluffs or your local gym.",
+    icon: "Trees",
+    title: "Camping",
+    body: "Find people who want to plan a camping weekend and spend more time outdoors.",
   },
   {
     icon: "Waves",
     title: "Swimming",
     body: "Find swim partners for Kitsilano Pool, Sasamat Lake, or your local lanes.",
   },
-  { icon: "Compass", title: "Adventures", body: "…and whatever comes next." },
+  {
+    icon: "Waves",
+    title: "Kayaking",
+    body: "Find kayaking partners for calm-water outings along British Columbia's lakes and coastlines.",
+  },
 ];
 
 export const WHO_FOR = [
@@ -148,5 +157,4 @@ export const FOUNDING_TAGS = [
   { icon: "Trees", label: "Build community" },
   { icon: "Flame", label: "Try something new" },
 ];
-
 
