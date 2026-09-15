@@ -1,10 +1,17 @@
 export const SITE_URL = "https://www.aktivpal.com";
-export const canonicalUrl = (path = "/") => new URL(path, `${SITE_URL}/`).href.replace(/\/$/, "");
+export function canonicalUrl(path = "/") {
+  const url = new URL(path, `${SITE_URL}/`);
+  if (url.origin !== SITE_URL) throw new Error("Canonical URLs must belong to AKTIVPAL");
+  url.search = "";
+  url.hash = "";
+  url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+  return url.href;
+}
 
 export const PUBLIC_PAGES = {
   "/": {
     title: "Find People for Outdoor Activities Near You | AKTIVPAL",
-    description: "Find people to hike, trail run, walk, camp, ski, kayak, swim and explore with. AKTIVPAL connects people through outdoor activities, starting in British Columbia.",
+    description: "Find people for hikes, walks, trail runs and more with AKTIVPAL. Explore outdoor activities and join early access, starting in British Columbia.",
     name: "Home",
   },
   "/about": {
@@ -14,7 +21,7 @@ export const PUBLIC_PAGES = {
   },
   "/movement": {
     title: "Outdoor Activities in British Columbia | AKTIVPAL",
-    description: "Explore upcoming walks, hikes, trail runs and other outdoor activities in British Columbia. Check the location, pace and details, then find people to move with.",
+    description: "Explore outdoor activities in British Columbia with AKTIVPAL. Check each walk, hike or trail run for its location, pace and meeting details.",
     name: "Movement",
   },
   "/waitlist": {

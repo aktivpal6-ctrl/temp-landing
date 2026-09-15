@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, MapPin } from "lucide-react";
 import { MaskedLines } from "@/components/about/motion";
@@ -26,14 +28,14 @@ export const Hero = () => {
       className="relative flex min-h-screen items-end overflow-hidden bg-[#0F291E]"
     >
       <motion.div style={{ y: imgY }} className="absolute inset-0">
-        <motion.img
-          src={HERO_IMG}
-          alt="Hikers moving along a mountain ridge trail"
+        <motion.div
           initial={{ scale: 1.18 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.6, ease: EASE }}
-          className="h-full w-full object-cover will-change-transform"
-        />
+          className="relative h-full w-full will-change-transform"
+        >
+          <Image src={HERO_IMG} alt="Hikers moving along a mountain ridge trail" fill preload sizes="100vw" className="object-cover" />
+        </motion.div>
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E]/70 via-[#0F291E]/55 to-[#0F291E]" />
 
@@ -41,6 +43,7 @@ export const Hero = () => {
         style={{ opacity: fade, y: contentY }}
         className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 pt-44 md:pb-36"
       >
+        <Breadcrumbs path="/about" className="mb-6 text-[#F7F7F2]/80" />
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

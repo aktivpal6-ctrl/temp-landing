@@ -11,6 +11,7 @@ export const ChapterOne = () => (
       <div>
         <Reveal>
           <Kicker>Chapter 01 — The Beginning</Kicker>
+          <h2 className="mt-6 font-display text-3xl font-black tracking-tight text-[#0F291E] md:text-4xl">Why we built AKTIVPAL</h2>
         </Reveal>
         <Reveal delay={0.08}>
           <p className="mt-7 text-lg font-medium leading-relaxed text-[#1A1D1A] md:text-xl">

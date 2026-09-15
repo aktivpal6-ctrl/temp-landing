@@ -6,9 +6,9 @@ export const IMAGES = {
   run: "/images/home/photo-1785418169168-23de800ab1bd.jpeg",
   climb: "/images/home/photo-1727558729775-83c4ab8d55a8.jpeg",
   bike: "/images/home/photo-1627044185459-09e6dbc39444.jpeg",
-  ski: "https://images.pexels.com/photos/15602865/pexels-photo-15602865.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  ski: "/images/home/pexels-photo-15602865.avif",
   canada:
-    "https://images.pexels.com/photos/8561213/pexels-photo-8561213.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    "/images/home/pexels-photo-8561213.avif",
   activitiesBg: "/images/home/photo-1566353820666-883ec100f41b.jpeg",
 };
 
@@ -157,4 +157,3 @@ export const FOUNDING_TAGS = [
   { icon: "Trees", label: "Build community" },
   { icon: "Flame", label: "Try something new" },
 ];
-

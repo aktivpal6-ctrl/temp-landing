@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "./providers";
 import { SITE_URL } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 const GA_ID = "G-CEH9SBXJSJ";
 
@@ -39,7 +40,7 @@ export const viewport = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://www.aktivpal.com/#organization",
+  "@id": `${SITE_URL}/#organization`,
   name: "AKTIVPAL",
   url: `${SITE_URL}/`,
   logo: {
@@ -73,7 +74,7 @@ const websiteSchema = {
   inLanguage: "en-CA",
   publisher: {
     "@type": "Organization",
-    "@id": "https://www.aktivpal.com/#organization",
+    "@id": `${SITE_URL}/#organization`,
   },
   // TODO: Add SearchAction if a search endpoint is implemented
 };
@@ -98,18 +99,19 @@ export default function RootLayout({ children }) {
           `}
         </Script>
         </>}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema),
-          }}
-        />
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
+        <noscript>
+          <style>{`
+            main [style*="opacity:0"], main [style*="opacity: 0"],
+            main .ap-reveal, main .ap-reveal-right, main .ap-stagger-item,
+            main .ap-hero-reveal, main [style*="translateY(110%)"] {
+              opacity: 1 !important;
+              transform: none !important;
+              animation: none !important;
+            }
+          `}</style>
+        </noscript>
       </head>
       <body>
         <Providers>{children}</Providers>

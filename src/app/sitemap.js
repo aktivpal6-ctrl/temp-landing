@@ -1,17 +1,11 @@
 import { PUBLIC_PAGES, canonicalUrl } from "@/lib/seo";
 
-const LAST_MODIFIED = {
-  "/": "2026-09-15",
-  "/about": "2026-09-15",
-  "/movement": "2026-09-15",
-  "/waitlist": "2026-09-15",
-};
-
 /** @returns {import('next').MetadataRoute.Sitemap} */
 export default function sitemap() {
   return Object.keys(PUBLIC_PAGES).map((path) => ({
     url: canonicalUrl(path),
-    lastModified: new Date(LAST_MODIFIED[path]),
+    // Omit lastModified until a reliable content revision timestamp is available.
+    // Build/request time is not a content change.
     changeFrequency: path === "/about" ? "monthly" : "weekly",
     priority: path === "/" ? 1 : 0.7,
   }));

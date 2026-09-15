@@ -20,6 +20,18 @@ const nextConfig = {
       { source: "/admin/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/login", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/api/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/search/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      // Query variants keep their clean canonical and cannot be indexed separately.
+      ...["q", "search", "sort", "filter", "category", "activity", "location", "difficulty", "event"].map((key) => ({
+        source: "/:page(about|movement|waitlist)?",
+        has: [{ type: "query", key }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      })),
+      {
+        source: "/:page(about|movement|waitlist)?",
+        has: [{ type: "query", key: "page", value: "(?:0*[2-9]|0*[1-9][0-9]+)" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      },
     ];
   },
   async redirects() {

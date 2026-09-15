@@ -6,8 +6,8 @@ export default function robots() {
     rules: [{
       userAgent: "*",
       allow: "/",
-      // Login/admin must remain crawlable so their noindex can be read.
-      disallow: ["/api/"],
+      // Crawl exclusions are not access controls. Private routes also send noindex.
+      disallow: ["/api/", "/admin", "/search"],
     }],
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

@@ -7,7 +7,11 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
-import * as Icons from "lucide-react";
+import {
+  ArrowRight, ArrowUpRight, CalendarClock, Check, ChevronDown, Circle, Clock, Users,
+  Compass, Flame, Footprints, Gauge, Handshake, Heart, History, IdCard,
+  Map, MapPin, Mountain, ScrollText, Snowflake, Sparkles, Star, Trees, Waves, Zap,
+} from "lucide-react";
 import {
   Logo,
   Reveal,
@@ -29,8 +33,14 @@ import {
   COMMUNITY_TAGS,
 } from "../data/survey";
 
+const ICONS = {
+  ArrowRight, ArrowUpRight, CalendarClock, Check, ChevronDown, Circle, Clock, Users,
+  Compass, Flame, Footprints, Gauge, Handshake, Heart, History, IdCard,
+  Map, MapPin, Mountain, ScrollText, Snowflake, Sparkles, Star, Trees, Waves, Zap,
+};
+
 const Ic = ({ name, ...p }) => {
-  const C = Icons[name] || Icons.Circle;
+  const C = ICONS[name] || Circle;
   return <C {...p} />;
 };
 
@@ -86,7 +96,7 @@ export const Hero = () => {
           src={IMAGES.hero}
           alt="Hikers moving along a mountain ridge trail"
           fill
-          priority
+          preload
           sizes="100vw"
           className="w-full h-full object-cover opacity-55"
         />
@@ -634,6 +644,12 @@ export const Safety = () => {
           </h2>
           <p className="mt-6 text-lg text-[#F7F7F2]/70 max-w-2xl">
             Meeting new people should feel exciting — not uncertain.
+          </p>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#F7F7F2]/80">
+            Before heading out, review{" "}
+            <a href="https://www.adventuresmart.ca/the-three-ts/" className="underline underline-offset-4">AdventureSmart’s trip planning, training and essentials guidance</a>
+            {" and check the "}
+            <Link href="/movement" className="underline underline-offset-4">activity details</Link>.
           </p>
         </Reveal>
         <Stagger

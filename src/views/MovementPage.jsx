@@ -14,6 +14,7 @@ import { Kicker, MaskedLines } from "@/components/about/motion";
 import { EventCard } from "@/components/movement/EventCard";
 import { EventDetailDrawer } from "@/components/movement/EventDetailDrawer";
 import { JoinModal } from "@/components/movement/JoinModal";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1627289496743-8a9a08bb228a?crop=entropy&cs=srgb&fm=jpg&w=2000&q=85";
@@ -29,11 +30,11 @@ const CardSkeleton = () => (
   </div>
 );
 
-export default function MovementPage({ initialEvents = [] }) {
+export default function MovementPage({ initialEvents = [], initialLoadError = false }) {
   const router = useRouter();
   const [events, setEvents] = useState(initialEvents);
-  const [loading, setLoading] = useState(initialEvents.length === 0);
-  const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(initialLoadError);
   const [selectedId, setSelectedId] = useState(null);
   const [joinedIds, setJoinedIds] = useState(() => new Set());
   const [joinModalEventId, setJoinModalEventId] = useState(null);
@@ -71,17 +72,17 @@ export default function MovementPage({ initialEvents = [] }) {
   }, []);
 
   useEffect(() => {
-    if (initialEvents.length > 0) {
-      setLoading(false);
-      return;
-    }
+    if (!initialLoadError) return;
+    const controller = new AbortController();
     const fetchEvents = async () => {
       try {
-        const res = await fetch("/api/events");
+        const res = await fetch("/api/events", { signal: controller.signal });
         const data = await res.json();
         if (!res.ok || !Array.isArray(data)) throw new Error("Event feed unavailable");
         setEvents(data);
-      } catch {
+        setLoadError(false);
+      } catch (error) {
+        if (error.name === "AbortError") return;
         setLoadError(true);
         toast.error("Couldn't load events. Please try again.");
       } finally {
@@ -89,7 +90,8 @@ export default function MovementPage({ initialEvents = [] }) {
       }
     };
     fetchEvents();
-  }, [initialEvents.length]);
+    return () => controller.abort();
+  }, [initialLoadError]);
 
   useEffect(() => {
     if (!loading && initialEventId && events.length > 0) {
@@ -132,13 +134,14 @@ export default function MovementPage({ initialEvents = [] }) {
               src={HERO_IMG}
               alt="A group of hikers crossing an open mountain meadow"
               fill
-              priority
+              preload
               sizes="100vw"
               className="object-cover"
             />
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-b from-[#0F291E]/70 via-[#0F291E]/55 to-[#0F291E]" />
           <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20 pt-40">
+            <Breadcrumbs path="/movement" className="mb-6 text-[#F7F7F2]/80" />
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
               <Kicker>Movement — Events</Kicker>
             </motion.div>
@@ -161,7 +164,7 @@ export default function MovementPage({ initialEvents = [] }) {
             <div className="mb-12 flex items-center gap-3">
               <Compass className="h-5 w-5 text-[#FF5C00]" />
               <h2 className="font-display text-2xl font-extrabold tracking-tight text-[#0F291E] md:text-3xl">
-                Upcoming activities in British Columbia
+                Outdoor activities in British Columbia
               </h2>
             </div>
 
@@ -210,7 +213,7 @@ export default function MovementPage({ initialEvents = [] }) {
             <noscript>
               <p className="py-16 text-center text-[#4A524A]">
                 AKTIVPAL organises outdoor activities including walks, hikes and trail runs in British Columbia, Canada.
-                Enable JavaScript to view upcoming events and join activities.
+                Activity information is shown above. Enable JavaScript to open event details and join activities.
               </p>
             </noscript>
           </div>

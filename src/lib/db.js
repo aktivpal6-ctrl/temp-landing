@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
 
-if (!MONGO_URI) {
-  throw new Error("Please define the MONGO_URI environment variable in .env.local");
-}
-
 let cached = global.mongoose;
 
 if (!cached) {
@@ -13,15 +9,23 @@ if (!cached) {
 }
 
 export async function connectToDatabase() {
+  if (!MONGO_URI) throw new Error("Please define MONGO_URI");
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGO_URI, {
       bufferCommands: false,
       dbName: "aktivpal",
+      serverSelectionTimeoutMS: 5000,
     });
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    // A temporary outage must not poison every later request until restart.
+    cached.promise = null;
+    throw error;
+  }
 }

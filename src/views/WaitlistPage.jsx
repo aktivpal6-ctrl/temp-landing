@@ -13,11 +13,12 @@ import { Survey } from "@/components/Survey";
 import { Logo } from "@/components/primitives";
 import { IMAGES } from "@/data/survey";
 import { Footer } from "@/components/Footer";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const WAITLIST_PAGE_HIGHLIGHTS = [
   {
     icon: MapPin,
-    title: "Be an early member",
+    title: "Join the AKTIVPAL early access waitlist",
     body: "Sign up with your details and we'll invite you to be one of the first to try AKTIVPAL when it launches.",
   },
   {
@@ -62,11 +63,12 @@ export const WaitlistPage = () => {
           className="lg:sticky lg:top-28 space-y-6"
           data-testid="waitlist-page-overview"
         >
+          <Breadcrumbs path="/waitlist" className="text-[#4A524A]" />
           <div className="relative overflow-hidden rounded-[2rem] bg-[#0F291E] grain text-[#F7F7F2] border border-black/10 shadow-[0_24px_60px_rgba(15,41,30,0.18)]">
             <div className="absolute inset-0" aria-hidden>
               <Image
                 src={IMAGES.canada}
-                alt="People outdoors in Canada"
+                alt=""
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="h-full w-full object-cover opacity-30"

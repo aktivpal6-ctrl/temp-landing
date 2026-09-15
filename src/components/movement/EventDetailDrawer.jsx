@@ -59,6 +59,8 @@ export const EventDetailDrawer = ({ event, open, onOpenChange, onOpenJoinModal, 
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
+        timeZone: "America/Vancouver",
+        timeZoneName: "short",
       })
     : "";
 
@@ -70,6 +72,8 @@ export const EventDetailDrawer = ({ event, open, onOpenChange, onOpenJoinModal, 
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
+        timeZone: "America/Vancouver",
+        timeZoneName: "short",
       })
     : "";
 
@@ -144,7 +148,7 @@ export const EventDetailDrawer = ({ event, open, onOpenChange, onOpenJoinModal, 
                   label="Attendees"
                   value={
                     <span>
-                      <span data-testid="detail-attendees-count">{event.attendees?.length || 0}</span> going
+                      <span data-testid="detail-attendees-count">{event.attendeeCount || 0}</span> going
                     </span>
                   }
                   testid="detail-attendees"

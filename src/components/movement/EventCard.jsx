@@ -26,6 +26,8 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
+    timeZone: "America/Vancouver",
+    timeZoneName: "short",
   });
 
   const deadline = event.join_deadline || event.start_time;
@@ -51,7 +53,7 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
       role="button"
       tabIndex={0}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpen(event._id)}
-      initial={{ opacity: 0, y: 34 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: EASE }}
@@ -103,7 +105,7 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
             )}
           </MetaRow>
           <MetaRow icon={Clock} testid={`event-${event._id}-start-time`}>
-            {startLabel}
+            <time dateTime={event.start_time}>{startLabel}</time>
           </MetaRow>
           <MetaRow icon={Timer} testid={`event-${event._id}-duration`}>
             {event.duration}
@@ -114,7 +116,7 @@ export const EventCard = ({ event, onOpenJoinModal, onOpen, joined = false, inde
           <div data-testid={`event-${event._id}-attendees`} className="flex items-center gap-2">
             <Users className="h-4 w-4 text-[#0F291E]" />
             <span className="font-display text-lg font-extrabold text-[#0F291E]" data-testid={`event-${event._id}-attendees-count`}>
-              {event.attendees?.length || 0}
+              {event.attendeeCount || 0}
             </span>
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0F291E]/50">going</span>
           </div>

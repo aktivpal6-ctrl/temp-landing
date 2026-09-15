@@ -51,7 +51,7 @@ try {
       const response = await fetch(base + path);
       assert.equal(response.status, 200);
       const html = await response.text();
-      const canonical = "https://www.aktivpal.com" + (path === "/" ? "" : path);
+      const canonical = "https://www.aktivpal.com" + path;
       assert.ok(html.includes('lang="en-CA"'));
       assert.ok(html.includes(`rel="canonical" href="${canonical}"`));
       assert.ok(html.includes(`property="og:url" content="${canonical}"`));
@@ -59,6 +59,8 @@ try {
       assert.ok(html.includes('name="twitter:card" content="summary_large_image"'));
       assert.ok(!html.includes("googletagmanager.com"), "Analytics disabled for tests");
       titles.add(html.match(/<title>(.*?)<\/title>/)[1]);
+      assert.equal((html.match(/<h1[ >]/g) || []).length, 1, `${path}: one H1`);
+      assert.equal((html.match(/rel="canonical"/g) || []).length, 1, `${path}: one canonical`);
       const data = schemas(html);
       assert.ok(data.some((item) => item["@type"] === "Organization" && item.areaServed.name === "British Columbia, Canada"));
       assert.ok(data.some((item) => item["@id"] === canonical + "#webpage" && item.isPartOf["@id"].endsWith("/#website")));
@@ -67,21 +69,23 @@ try {
     assert.equal(titles.size, 4);
     const html = await (await fetch(base + "/movement?event=test&utm_source=test")).text();
     assert.ok(html.includes('rel="canonical" href="https://www.aktivpal.com/movement"'));
-    assert.ok(html.includes("Upcoming activities in British Columbia"));
+    assert.ok(html.includes("Outdoor activities in British Columbia"));
+    assert.ok(html.includes("Activities could not be loaded"), "Database outage is explained in server HTML");
+    assert.ok(!html.includes("animate-pulse"), "Server response does not leave an empty loading shell");
   });
 
   await check("sitemap, robots, private route indexing and canonical redirects", async () => {
     const xml = await (await fetch(base + "/sitemap.xml")).text();
     const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
-    assert.deepEqual(locations.sort(), routes.map((path) => "https://www.aktivpal.com" + (path === "/" ? "" : path)).sort());
+    assert.deepEqual(locations.sort(), routes.map((path) => "https://www.aktivpal.com" + path).sort());
     const lastModified = [...xml.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map((m) => m[1]);
-    assert.equal(lastModified.length, routes.length);
-    assert.ok(lastModified.every((value) => !Number.isNaN(Date.parse(value))));
+    assert.equal(lastModified.length, 0, "Do not fabricate content modification dates");
     const robots = await (await fetch(base + "/robots.txt")).text();
     assert.ok(robots.includes("Allow: /"));
     assert.ok(robots.includes("Disallow: /api/"));
     assert.ok(robots.includes("Sitemap: https://www.aktivpal.com/sitemap.xml"));
-    assert.ok(!robots.includes("Disallow: /admin") && !robots.includes("Disallow: /login"));
+    assert.ok(robots.includes("Disallow: /admin") && robots.includes("Disallow: /search"));
+    assert.ok(!robots.includes("Disallow: /login"));
     for (const path of ["/login", "/admin", "/admin/events", "/admin/events/test/edit"]) {
       const response = await fetch(base + path);
       assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
@@ -101,13 +105,26 @@ try {
     });
     assert.equal(hostRedirect.statusCode, 308);
     assert.equal(hostRedirect.headers.location, "https://www.aktivpal.com/about");
+    for (const path of routes) {
+      for (const query of ["sort=date", "filter=hiking", "q=walk", "page=2", "page=10", "page=02", "event=test"]) {
+        const response = await fetch(`${base}${path}?${query}`, { method: "HEAD" });
+        assert.equal(response.headers.get("x-robots-tag"), "noindex, follow", `${path}?${query}`);
+      }
+      for (const query of ["utm_source=test", "page=1"]) {
+        const response = await fetch(`${base}${path}?${query}`, { method: "HEAD" });
+        assert.equal(response.headers.get("x-robots-tag"), null, `${path}?${query} keeps clean-page indexing`);
+      }
+    }
+    const missing = await fetch(base + "/missing-seo-test-page");
+    assert.equal(missing.status, 404);
+    assert.ok((await missing.text()).includes('name="robots" content="noindex"'));
   });
 
   await check("no-JavaScript content, native FAQs and crawlable internal links", async () => {
     const ctx = await context({ javaScriptEnabled: false });
     const page = await ctx.newPage();
     await page.goto(base);
-    assert.ok(await page.getByRole("heading", { name: "Find your people. Then get moving." }).isVisible());
+    assert.ok(await page.getByRole("heading", { name: "Find people for outdoor activities near you." }).isVisible());
     const html = await (await fetch(base)).text();
     const faq = schemas(html).find((item) => item["@type"] === "FAQPage");
     for (const question of faq.mainEntity) {
@@ -118,7 +135,20 @@ try {
     }
     for (const path of routes.slice(1)) assert.ok(await page.locator(`a[href="${path}"]`).count());
     await page.goto(base + "/movement");
-    assert.ok(await page.getByRole("heading", { name: "Upcoming activities in British Columbia" }).isVisible());
+    assert.ok(await page.getByRole("heading", { name: "Outdoor activities in British Columbia" }).isVisible());
+    for (const path of routes) {
+      await page.goto(base + path);
+      const hidden = await page.locator("main h1, main h2, main p").evaluateAll((elements) => elements.filter((element) => {
+        if (element.closest("details:not([open])")) return false;
+        for (let node = element; node && node.tagName !== "BODY"; node = node.parentElement) {
+          const style = getComputedStyle(node);
+          if (Number(style.opacity) === 0 || style.visibility === "hidden" || style.display === "none") return true;
+        }
+        return false;
+      }).map((element) => element.textContent.slice(0, 80)));
+      assert.deepEqual(hidden, [], `${path}: content remains visible without JavaScript`);
+      if (path !== "/") assert.ok(await page.getByRole("navigation", { name: "Breadcrumb", exact: true }).isVisible());
+    }
     await ctx.close();
   });
 
@@ -126,6 +156,23 @@ try {
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  await check("responsive public pages and optimized About hero", async () => {
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of routes) {
+        await page.goto(base + path);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${path} overflows at ${width}px`);
+        assert.equal(await page.locator("main h1").count(), 1);
+        assert.equal(await page.locator("img:not([alt])").count(), 0);
+        await page.screenshot({ path: join(artifacts, `${path.slice(1) || "home"}-${width}.png`) });
+      }
+    }
+    await page.goto(base + "/about");
+    const hero = page.getByTestId("about-hero").locator("img");
+    await hero.evaluate((img) => img.decode());
+    assert.ok((await hero.getAttribute("srcset")).includes("/_next/image?"));
+    assert.ok(await hero.evaluate((img) => img.naturalWidth > 0));
+  });
   await check("desktop navigation contrast, keyboard focus and route links", async () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     for (const path of ["/", "/about", "/movement"]) {

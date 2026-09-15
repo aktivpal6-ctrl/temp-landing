@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
 import Event from "@/models/Event";
+import { publicEvent } from "@/lib/public-event";
 
 export const runtime = "nodejs";
 
@@ -26,7 +27,10 @@ export async function GET(_request, { params }) {
 
     event.attendees = Array.isArray(event.attendees) ? event.attendees : [];
 
-    return NextResponse.json(event);
+    const isAdmin = await requireAdmin();
+    return NextResponse.json(isAdmin ? event : publicEvent(event), {
+      headers: { "Cache-Control": "private, no-store", Vary: "Cookie" },
+    });
   } catch (e) {
     console.error("Event fetch error:", e.message);
     return NextResponse.json({ ok: false }, { status: 500 });

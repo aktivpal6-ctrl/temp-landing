@@ -22,7 +22,7 @@ export function CanadaIntro() {
             <MapPin aria-hidden="true" size={15} /> Starting in British Columbia
           </div>
           <h2 id="canada-heading" className="mt-6 max-w-xl font-display text-4xl font-black leading-[1.02] tracking-tight text-[#0F291E] md:text-6xl">
-            Find your people. <span className="text-[#FF5C00]">Then get moving.</span>
+            Find people for outdoor activities <span className="text-[#FF5C00]">near you.</span>
           </h2>
         </div>
         <div>

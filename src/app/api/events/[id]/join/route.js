@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import Event from "@/models/Event";
 import { sendJoinConfirmation } from "@/lib/mail";
+import { publicEvent } from "@/lib/public-event";
 
 export const runtime = "nodejs";
 
@@ -98,7 +99,7 @@ export async function POST(request, { params }) {
       attendee,
     ).catch((err) => console.error("Failed to send join confirmation email:", err.message));
 
-    return NextResponse.json(updated);
+    return NextResponse.json(publicEvent(updated));
   } catch (e) {
     console.error("Event join error:", e.message);
     return NextResponse.json({ ok: false }, { status: 500 });
