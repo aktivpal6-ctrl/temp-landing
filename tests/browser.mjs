@@ -14,7 +14,7 @@ const browser = await chromium.launch({
   headless: true,
   ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
 });
-const routes = ["/", "/about", "/movement", "/waitlist"];
+const routes = ["/", "/about", "/movement", "/waitlist", "/how-it-works", "/faq", "/blog"];
 let checks = 0;
 async function check(name, fn) {
   await fn();
@@ -52,9 +52,11 @@ try {
       assert.equal(response.status, 200);
       const html = await response.text();
       const canonical = "https://www.aktivpal.com" + path;
+      // Next normalizes the homepage metadata URL without a trailing slash.
+      const metadataCanonical = path === "/" ? canonical.slice(0, -1) : canonical;
       assert.ok(html.includes('lang="en-CA"'));
-      assert.ok(html.includes(`rel="canonical" href="${canonical}"`));
-      assert.ok(html.includes(`property="og:url" content="${canonical}"`));
+      assert.ok(html.includes(`rel="canonical" href="${metadataCanonical}"`));
+      assert.ok(html.includes(`property="og:url" content="${metadataCanonical}"`));
       assert.ok(html.includes('property="og:locale" content="en_CA"'));
       assert.ok(html.includes('name="twitter:card" content="summary_large_image"'));
       assert.ok(!html.includes("googletagmanager.com"), "Analytics disabled for tests");
@@ -66,7 +68,7 @@ try {
       assert.ok(data.some((item) => item["@id"] === canonical + "#webpage" && item.isPartOf["@id"].endsWith("/#website")));
       assert.ok(data.some((item) => item["@type"] === "BreadcrumbList"));
     }
-    assert.equal(titles.size, 4);
+    assert.equal(titles.size, routes.length);
     const html = await (await fetch(base + "/movement?event=test&utm_source=test")).text();
     assert.ok(html.includes('rel="canonical" href="https://www.aktivpal.com/movement"'));
     assert.ok(html.includes("Outdoor activities in British Columbia"));
@@ -86,6 +88,8 @@ try {
     assert.ok(robots.includes("Sitemap: https://www.aktivpal.com/sitemap.xml"));
     assert.ok(robots.includes("Disallow: /admin") && robots.includes("Disallow: /search"));
     assert.ok(!robots.includes("Disallow: /login"));
+    // The IndexNow key file only exists where INDEXNOW_KEY is set (the live site).
+    assert.equal((await fetch(base + "/indexnow-key.txt")).status, 404);
     for (const path of ["/login", "/admin", "/admin/events", "/admin/events/test/edit"]) {
       const response = await fetch(base + path);
       assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
@@ -125,7 +129,9 @@ try {
     const page = await ctx.newPage();
     await page.goto(base);
     assert.ok(await page.getByRole("heading", { name: "Find people for outdoor activities near you." }).isVisible());
-    const html = await (await fetch(base)).text();
+    assert.equal(await page.locator("main details").count(), 0);
+    await page.goto(base + "/faq");
+    const html = await (await fetch(base + "/faq")).text();
     const faq = schemas(html).find((item) => item["@type"] === "FAQPage");
     for (const question of faq.mainEntity) {
       const details = page.locator("details").filter({ hasText: question.name });
@@ -147,7 +153,7 @@ try {
         return false;
       }).map((element) => element.textContent.slice(0, 80)));
       assert.deepEqual(hidden, [], `${path}: content remains visible without JavaScript`);
-      if (path !== "/") assert.ok(await page.getByRole("navigation", { name: "Breadcrumb", exact: true }).isVisible());
+      if (["/about", "/movement", "/waitlist", "/blog"].includes(path)) assert.ok(await page.getByRole("navigation", { name: "Breadcrumb", exact: true }).isVisible());
     }
     await ctx.close();
   });
@@ -157,12 +163,16 @@ try {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await check("responsive public pages and optimized About hero", async () => {
-    for (const width of [390, 1440]) {
+    for (const width of [360, 375, 768, 1280]) {
       await page.setViewportSize({ width, height: 900 });
       for (const path of routes) {
         await page.goto(base + path);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${path} overflows at ${width}px`);
         assert.equal(await page.locator("main h1").count(), 1);
+        if (["/", "/how-it-works", "/faq"].includes(path)) {
+          const heading = await page.locator("main h1").evaluate((el) => ({ size: parseFloat(getComputedStyle(el).fontSize), weight: Number(getComputedStyle(el).fontWeight) }));
+          assert.ok(heading.size >= 32 && heading.weight >= 600, `${path}: heading scale survives global styles`);
+        }
         assert.equal(await page.locator("img:not([alt])").count(), 0);
         await page.screenshot({ path: join(artifacts, `${path.slice(1) || "home"}-${width}.png`) });
       }
@@ -175,19 +185,18 @@ try {
   });
   await check("desktop navigation contrast, keyboard focus and route links", async () => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    for (const path of ["/", "/about", "/movement"]) {
+    for (const path of routes) {
       await page.goto(base + path);
       for (const scroll of [0, 1000]) {
         await page.evaluate((y) => window.scrollTo(0, y), scroll);
-        await page.waitForFunction((expected) => document.querySelector("[data-testid=site-nav]").dataset.theme === expected, scroll ? "light" : "dark");
+        await page.waitForFunction((expected) => document.querySelector("[data-testid=site-nav]").dataset.theme === expected, "light");
         const palette = await page.getByTestId("site-nav").evaluate((header) => ({
           background: getComputedStyle(header).backgroundColor,
           text: getComputedStyle(header).color,
           logo: header.querySelector("svg path").getAttribute("fill"),
         }));
-        assert.deepEqual(palette, scroll
-          ? { background: "rgb(247, 247, 242)", text: "rgb(15, 41, 30)", logo: "#0F291E" }
-          : { background: "rgb(15, 41, 30)", text: "rgb(247, 247, 242)", logo: "#F7F7F2" });
+        assert.equal(palette.text, "rgb(15, 41, 30)");
+        assert.equal(palette.logo, "#0F291E");
         const contrast = await page.getByTestId("site-nav").evaluate((header) => {
           const luminance = (color) => {
             const rgb = color.match(/[\d.]+/g).slice(0, 3).map(Number).map((v) => {
@@ -209,9 +218,9 @@ try {
     await page.keyboard.press("Tab");
     assert.ok(await page.evaluate(() => document.activeElement.matches(":focus-visible")));
     assert.equal(await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle), "solid");
-    await page.getByTestId("site-nav").getByRole("link", { name: "Our Story" }).click();
+    await page.getByTestId("site-nav").getByRole("link", { name: "Our story" }).click();
     await page.waitForURL(base + "/about");
-    assert.equal(await page.getByTestId("site-nav").getByRole("link", { name: "Our Story" }).getAttribute("aria-current"), "page");
+    assert.equal(await page.getByTestId("site-nav").getByRole("link", { name: "Our story" }).getAttribute("aria-current"), "page");
     await page.screenshot({ path: join(artifacts, "desktop-navbar.png") });
   });
 
@@ -246,7 +255,7 @@ try {
     const dialog = page.getByTestId("mobile-nav-overlay");
     await page.goto(base + "/about");
     await toggle.click();
-    await dialog.getByRole("link", { name: "Our Story" }).click();
+    await dialog.getByRole("link", { name: "Our story" }).click();
     await waitFor(page, () => !document.querySelector("dialog").open && document.body.style.overflow !== "hidden");
     await toggle.click();
     await dialog.getByRole("link", { name: "AKTIVPAL home" }).click();
@@ -257,10 +266,10 @@ try {
     assert.notEqual(await page.evaluate(() => document.body.style.overflow), "hidden");
     await page.goto(base);
     await toggle.click();
-    await page.setViewportSize({ width: 768, height: 700 });
+    await page.setViewportSize({ width: 1000, height: 700 });
     await waitFor(page, () => !document.querySelector("dialog").open && document.body.style.overflow !== "hidden");
     assert.ok(await page.getByTestId("nav-cta").evaluate((el) => el === document.activeElement));
-    await page.setViewportSize({ width: 767, height: 600 });
+    await page.setViewportSize({ width: 999, height: 600 });
     assert.equal(await toggle.getAttribute("aria-expanded"), "false");
     await page.setViewportSize({ width: 320, height: 480 });
     await toggle.click();
@@ -276,6 +285,102 @@ try {
     await page.goto(base + "/movement");
     await page.getByRole("status").filter({ hasText: "Activities could not be loaded" }).waitFor();
     assert.deepEqual(errors, []);
+  });
+  await check("shared navigation, footer-only FAQ and trust links, accessible example toggle", async () => {
+    for (const path of routes) {
+      await page.goto(base + path);
+      assert.equal(await page.getByTestId("site-nav").count(), 1);
+      assert.equal(await page.getByRole("navigation", { name: "Footer navigation" }).count(), 1);
+      assert.equal(await page.getByTestId("site-nav").locator('a[href="/faq"]').count(), 0);
+      assert.equal(await page.getByTestId("mobile-nav-overlay").locator('a[href="/faq"]').count(), 0);
+      assert.equal(await page.getByRole("navigation", { name: "Footer navigation" }).locator('a[href="/faq"]').count(), 1);
+      // Trust and safety lives in the footer only, like the FAQ.
+      assert.equal(await page.getByTestId("site-nav").locator('a[href="/#trust"]').count(), 0);
+      assert.equal(await page.getByTestId("mobile-nav-overlay").locator('a[href="/#trust"]').count(), 0);
+      assert.equal(await page.getByRole("navigation", { name: "Footer navigation" }).locator('a[href="/#trust"]').count(), 1);
+    }
+    await page.goto(base);
+    // The accessible name changes with the state, so find the toggle by its pressed state.
+    const toggle = page.locator(".apm-plan-card button[aria-pressed]");
+    await toggle.click();
+    assert.equal(await toggle.getAttribute("aria-pressed"), "true");
+    assert.equal(await toggle.innerText(), "You're in");
+    assert.ok(await page.locator(".apm-plan-card").getByText("4 interested", { exact: true }).isVisible());
+    await toggle.click();
+    assert.equal(await toggle.getAttribute("aria-pressed"), "false");
+    assert.ok(await page.locator(".apm-plan-card").getByText("3 interested", { exact: true }).isVisible());
+    await page.goto(base + "/faq");
+    await page.keyboard.press("Tab");
+    assert.equal(await page.evaluate(() => document.activeElement.textContent), "Skip to content");
+    await page.keyboard.press("Enter");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "main-content");
+  });
+
+  await check("dark scheme, local photos, touch targets and reduced motion", async () => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const colorScheme of ["light", "dark"]) {
+      await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      for (const path of ["/", "/how-it-works", "/faq"]) {
+        await page.goto(base + path);
+        for (const img of await page.locator("main img").all()) {
+          await img.scrollIntoViewIfNeeded();
+          // Lazy images start loading a frame after they scroll into view; wait for a real load.
+          await img.evaluate((element) => (element.complete && element.naturalWidth > 0) || new Promise((resolve, reject) => {
+            element.addEventListener("load", resolve, { once: true });
+            element.addEventListener("error", () => reject(new Error(`Image failed to load: ${element.currentSrc}`)), { once: true });
+          }));
+          await img.evaluate((element) => element.decode());
+          assert.ok((await img.getAttribute("src")).startsWith("/_next/image?url=%2Fimages%2Fhome%2F"));
+        }
+        const shortTargets = await page.locator("main a, main button, main summary").evaluateAll((elements) => elements.filter((el) => el.getBoundingClientRect().height < 44).map((el) => el.textContent));
+        assert.deepEqual(shortTargets, []);
+        assert.equal(await page.locator(".apm-pending").count(), 0);
+        assert.equal(await page.evaluate(() => document.getAnimations().length), 0);
+        await page.screenshot({ path: join(artifacts, `${path.slice(1) || "home"}-${colorScheme}-375.png`), fullPage: true });
+      }
+      await page.goto(base);
+      const surface = await page.locator("main.marketing-page").evaluate((el) => getComputedStyle(el).backgroundColor);
+      assert.equal(surface, colorScheme === "dark" ? "rgb(10, 28, 20)" : "rgb(247, 247, 242)");
+    }
+  });
+
+  await check("home-only motion and live preference changes", async () => {
+    const motionContext = await context({ reducedMotion: "no-preference", viewport: { width: 1280, height: 900 } });
+    const motionPage = await motionContext.newPage();
+    await motionPage.goto(base);
+    await motionPage.waitForFunction(() => document.querySelector(".apm-pending"));
+    await motionPage.mouse.move(300, 250);
+    assert.ok(await motionPage.locator(".apm-hero").evaluate((el) => el.style.getPropertyValue("--mx")));
+    await motionPage.evaluate(() => window.scrollTo(0, 250));
+    // The home banner has no photo; its rings and elevation line carry the parallax.
+    await motionPage.waitForFunction(() => document.querySelector(".apm-hero [data-parallax]").style.translate !== "");
+    assert.equal(await motionPage.locator(".apm-hero img").count(), 0);
+    assert.equal(await motionPage.getByTestId("trail-rail").count(), 1);
+    // The timeline is taller than the viewport, so bring each step into view in turn.
+    for (const step of await motionPage.locator(".apm-steps > li").all()) await step.scrollIntoViewIfNeeded();
+    await motionPage.waitForFunction(() => !document.querySelector(".apm-steps .apm-pending"));
+    await motionPage.locator("[data-tilt]").hover();
+    assert.ok(await motionPage.locator("[data-tilt]").evaluate((el) => el.style.transform.includes("rotate")));
+    await motionPage.emulateMedia({ reducedMotion: "reduce" });
+    await motionPage.waitForFunction(() => !document.querySelector(".apm-pending") && [...document.querySelectorAll("[data-parallax]")].every((el) => el.style.translate === ""));
+    assert.equal(await motionPage.locator("[data-tilt]").evaluate((el) => el.style.transform), "");
+    await motionPage.emulateMedia({ reducedMotion: "no-preference" });
+    await motionPage.getByTestId("site-nav").getByRole("link", { name: "How it works", exact: true }).click();
+    await motionPage.waitForURL(base + "/how-it-works");
+    await motionPage.mouse.move(300, 250);
+    await motionPage.evaluate(() => window.scrollTo(0, 100));
+    // Scroll parallax is shared by the marketing pages; reveals and pointer effects stay home-only.
+    await motionPage.waitForFunction(() => document.querySelector(".apm-hero-photo").style.translate !== "");
+    assert.equal(await motionPage.getByTestId("trail-rail").count(), 1);
+    assert.equal(await motionPage.locator(".apm-hero").evaluate((el) => el.style.getPropertyValue("--mx")), "");
+    await motionContext.close();
+
+    const touchContext = await context({ reducedMotion: "no-preference", isMobile: true, hasTouch: true, viewport: { width: 375, height: 812 } });
+    const touchPage = await touchContext.newPage();
+    await touchPage.goto(base);
+    await touchPage.mouse.move(200, 200);
+    assert.equal(await touchPage.locator(".apm-hero").evaluate((el) => el.style.getPropertyValue("--mx")), "");
+    await touchContext.close();
   });
   await ctx.close();
   console.log(`${checks} browser test groups passed. Screenshots: ${artifacts}`);

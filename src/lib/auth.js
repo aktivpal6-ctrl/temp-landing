@@ -24,3 +24,8 @@ export function verifyToken(signed) {
   if (signature !== expected) return null;
   return token;
 }
+
+export async function isAdmin() {
+  const { cookies } = await import("next/headers");
+  return Boolean(verifyToken((await cookies()).get("admin_session")?.value));
+}

@@ -1,4 +1,8 @@
 import "@/index.css";
+import "@/components/marketing/marketing.css";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { SiteChrome } from "@/components/SiteChrome";
 import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "./providers";
@@ -48,7 +52,7 @@ const organizationSchema = {
     url: `${SITE_URL}/logo.svg`,
   },
   description:
-    "AKTIVPAL helps people find others to hike, trek, trail run, walk, camp, ski, kayak, swim and explore with, starting in British Columbia.",
+    "AKTIVPAL helps people find others for hikes, walks, trail runs and other outdoor activities, starting in British Columbia.",
   areaServed: {
     "@type": "AdministrativeArea",
     name: "British Columbia, Canada",
@@ -114,7 +118,7 @@ export default function RootLayout({ children }) {
         </noscript>
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers><SiteChrome header={<Nav />} footer={<Footer />}>{children}</SiteChrome></Providers>
       </body>
     </html>
   );

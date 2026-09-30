@@ -23,12 +23,12 @@ const nextConfig = {
       { source: "/search/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       // Query variants keep their clean canonical and cannot be indexed separately.
       ...["q", "search", "sort", "filter", "category", "activity", "location", "difficulty", "event"].map((key) => ({
-        source: "/:page(about|movement|waitlist)?",
+        source: "/:page(about|movement|waitlist|how-it-works|faq|blog)?",
         has: [{ type: "query", key }],
         headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
       })),
       {
-        source: "/:page(about|movement|waitlist)?",
+        source: "/:page(about|movement|waitlist|how-it-works|faq|blog)?",
         has: [{ type: "query", key: "page", value: "(?:0*[2-9]|0*[1-9][0-9]+)" }],
         headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
       },

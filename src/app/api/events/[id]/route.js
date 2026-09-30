@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
 import Event from "@/models/Event";
 import { publicEvent } from "@/lib/public-event";
+import { notifyIndexNow } from "@/lib/indexnow";
 
 export const runtime = "nodejs";
 
@@ -103,6 +104,8 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ ok: false, error: "Event not found" }, { status: 404 });
     }
 
+    // The /movement page lists every event.
+    after(() => notifyIndexNow(["/movement"]));
     return NextResponse.json({ ok: true, data: event });
   } catch (e) {
     console.error("Event update error:", e.message);
@@ -126,6 +129,7 @@ export async function DELETE(_request, { params }) {
       return NextResponse.json({ ok: false, error: "Event not found" }, { status: 404 });
     }
 
+    after(() => notifyIndexNow(["/movement"]));
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("Event delete error:", e.message);

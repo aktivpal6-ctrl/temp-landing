@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
 import Event from "@/models/Event";
 import { publicEvent } from "@/lib/public-event";
+import { notifyIndexNow } from "@/lib/indexnow";
 
 export const runtime = "nodejs";
 
@@ -94,6 +95,8 @@ export async function POST(request) {
       join_deadline: joinDeadline,
     });
 
+    // The /movement page lists every event.
+    after(() => notifyIndexNow(["/movement"]));
     return NextResponse.json({ ok: true, data: event }, { status: 201 });
   } catch (e) {
     console.error("Event create error:", e.message);

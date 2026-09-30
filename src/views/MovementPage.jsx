@@ -8,8 +8,6 @@ import Lenis from "lenis";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { ArrowRight, CalendarDays, Compass, MapPin } from "lucide-react";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/about/Footer";
 import { Kicker, MaskedLines } from "@/components/about/motion";
 import { EventCard } from "@/components/movement/EventCard";
 import { EventDetailDrawer } from "@/components/movement/EventDetailDrawer";
@@ -121,8 +119,7 @@ export default function MovementPage({ initialEvents = [], initialLoadError = fa
   return (
     <div className="relative min-h-screen bg-[#F7F7F2] text-[#1A1D1A]">
       <div aria-hidden="true" className="grain pointer-events-none fixed inset-0 z-[1]" />
-      <Nav />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section data-testid="movement-hero" className="relative flex min-h-[70vh] items-end overflow-hidden bg-[#0F291E]">
           <motion.div
             initial={{ scale: 1.15 }}
@@ -219,7 +216,6 @@ export default function MovementPage({ initialEvents = [], initialLoadError = fa
           </div>
         </section>
       </main>
-      <Footer />
 
       <EventDetailDrawer
         event={selectedEvent}

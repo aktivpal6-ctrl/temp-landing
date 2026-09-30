@@ -10,7 +10,7 @@ export const CanadaBuilt = () => (
     data-testid="canada-built-section"
     className="relative overflow-hidden py-28 md:py-36"
   >
-    <Numeral value="05" className="-top-8 right-0 md:right-6" />
+    <Numeral value="05" className="top-0 right-0 md:right-6" />
     <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
       <div>
         <Reveal>

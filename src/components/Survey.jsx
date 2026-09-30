@@ -2,14 +2,17 @@
 
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import * as Icons from "lucide-react";
+import { ArrowLeft, Circle, RotateCcw, Send } from "lucide-react";
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CTA } from "./primitives";
 
+// Named imports keep the bundle to the icons used here; a namespace import pulls
+// in every lucide icon, which also slowed pages that prefetch /waitlist.
+const ICONS = { ArrowLeft, RotateCcw, Send };
 const Ic = ({ name, ...p }) => {
-  const C = Icons[name] || Icons.Circle;
+  const C = ICONS[name] || Circle;
   return <C {...p} />;
 };
 

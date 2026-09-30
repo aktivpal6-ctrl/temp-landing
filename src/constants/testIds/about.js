@@ -3,7 +3,6 @@
 
 export const ABOUT = {
   hero: "about-hero",
-  heroLocationBadge: "hero-location-badge",
   chapter01: "chapter-01",
   chapter02: "chapter-02",
   chapter03: "chapter-03",
@@ -15,7 +14,4 @@ export const ABOUT = {
   canadaBuiltPointLocal: "canada-built-point-local",
   canadaBuiltPointCommunity: "canada-built-point-community",
   canadaMark: "canada-mark",
-  closingCta: "closing-cta",
-  joinMovementCta: "join-movement-cta",
-  footer: "about-footer",
 };
