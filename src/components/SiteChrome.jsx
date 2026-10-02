@@ -8,5 +8,7 @@ const PUBLIC_ROUTES = ["/", "/about", "/movement", "/waitlist", "/how-it-works",
 export function SiteChrome({ header, footer, children }) {
   const pathname = usePathname();
   if (!PUBLIC_ROUTES.includes(pathname) && !pathname.startsWith("/blog/")) return children;
-  return <>{header}{children}{footer}</>;
+  // Dark shell so a page shorter than the viewport still shows the brand's
+  // dark colour below the footer, instead of <body>'s cream background.
+  return <div className="marketing-chrome apm-shell">{header}{children}{footer}</div>;
 }
